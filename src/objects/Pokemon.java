@@ -125,4 +125,25 @@ public class Pokemon implements Elemento{
         }
         return false;
     }
+
+    /**
+     * Método que compara un elemento con otro.
+     * @param elemento a comparar.
+     * @return 0 si son el mismo, -1 si es menor y 1 si es mayor.
+     */
+    @Override
+    public int compararCon(Elemento elemento) {
+        //Comparación consigo mismo.
+        if(this==elemento){
+            return 0;
+        }
+
+        //Comparación por nombre.
+        if(elemento instanceof Pokemon pokemon){
+            return this.nombre.compareTo(pokemon.nombre);
+        }
+
+        //No se puede comparar.
+        throw new IllegalArgumentException("El elemento no es un Pokémon.");
+    }
 }

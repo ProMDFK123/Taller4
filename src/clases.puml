@@ -37,6 +37,7 @@ package system{
     Class SistemaImpl{
         +SistemaImpl()
         +menu(): void
+        +leerArchivo(String direccionArchivo): void
     }
     SistemaImpl ..^ Sistema: <<implementa>>
 
@@ -77,6 +78,7 @@ package list{
 
     interface Elemento <<interface>>{
         +esIgual(elemento: Elemento): boolean
+        +compararCon(elemento: Elemento): int
     }
     Elemento"1" --* NodoDoble: contiene <
 
