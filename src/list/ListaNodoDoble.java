@@ -293,4 +293,27 @@ public class ListaNodoDoble implements Lista{
 
         return null;
     }
+
+    //Los Getter's
+
+    /**
+     * @return la cabeza de la lista.
+     */
+    public NodoDoble getHead() {
+        return head;
+    }
+
+    /**
+     * @return la cola de la lista.
+     */
+    public NodoDoble getTail() {
+        return tail;
+    }
+
+    /**
+     * @return la cantidad de elementos en la lista.
+     */
+    public int getCantNodos() {
+        return cantNodos;
+    }
 }

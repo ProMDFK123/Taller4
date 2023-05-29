@@ -35,6 +35,8 @@ package system{
     }
 
     Class SistemaImpl{
+        -pokedex: ListaNodoDoble
+
         +SistemaImpl()
         +menu(): void
         +leerArchivo(String direccionArchivo): void
@@ -66,12 +68,28 @@ package list{
     NodoDoble"0..1" o--> "0..1"NodoDoble: anterior
     NodoDoble"0..1" o--> "0..1"NodoDoble: siguiente
 
+    Class ListaPokemon{
+        -lista: Pokemon[]
+        -actual: int
+        -max: int
+
+        +ListaPokemon(max: int)
+        +getMax(): int
+        +getActual(): int
+        +agregar(pokemon: Pokemon): void
+        +eliminar(pokemon: Pokemon): void
+        +obtener(posicion: int): Pokemon
+    }
+
     Class ListaNodoDoble{
         -head: NodoDoble
         -tail: NodoDoble
         -cantNodos: int
 
         +ListaNodoDoble()
+        +getHead(): NodoDoble
+        +getTail(): NodoDoble
+        +getCantNodos(): int
     }
     ListaNodoDoble *--> "0..1"NodoDoble: cabeza
     ListaNodoDoble *--> "0..1"NodoDoble: cola
@@ -103,4 +121,5 @@ package list{
 
 Pokemon ..^ Elemento: <<implementa>>
 SistemaImpl -- ListaNodoDoble: contiene >
+Pokemon"*" o--* "1"ListaPokemon: contiene <
 @enduml
