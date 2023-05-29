@@ -1,0 +1,104 @@
+@startuml
+skin rose
+
+package objects{
+    Class Pokemon{
+        -id: int
+        -nombre: String
+        -etapa: String
+        -evolucionSiguiente: String[]
+        -evolucionPrevia: String
+        -tipo1: String
+        -tipo2: String
+
+        +Pokemon(id: int, nombre: String, etapa: String, evolucionSiguiente: String[], evolucionPrevia: String, tipo1: String, tipo2: String)
+        +getId(): int
+        +getNombre(): String
+        +getEtapa(): String
+        +getEvolucionSiguiente(): String
+        +getEvolucionPrevia(): String
+        +getTipo1(): String
+        +getTipo2(): String
+    }
+}
+
+package system{
+    interface Sistema <<interface>>{
+        +desplegarPokemon(idInicio: int, idFin: int): void
+        +desplegarAlfabetico(): void
+        +desplegarTipo(tipo String): void
+        +desplegarPrimeraEvolucion(): void
+        +busquedaPersonalizada(nombre: String): void
+        +busquedaPersonalizada(id: int): void
+        +desplegarEvolucion(pokemon: Pokemon): void
+        +salir(estado: boolean): boolean
+    }
+
+    Class SistemaImpl{
+        +SistemaImpl()
+        +menu(): void
+    }
+    SistemaImpl ..^ Sistema: <<implementa>>
+
+    Class Utils{
+        -Utils()
+        +validarString(string: String): void
+        +validarId(id: int): void
+        +validarElemento(elemento: Elemento): void
+        +validarNumeroEnRango(integer: int, min: int, max: int): void
+    }
+}
+
+package list{
+    Class NodoDoble{
+        -elemento: Elemento
+        -next: NodoDoble
+        -back: NodoDoble
+
+        +NodoDoble(elemento: Elemento)
+        +getElemento(): Elemento
+        +getNext(): NodoDoble
+        +getBack(): NodoDoble
+        +setNext(next: NodoDoble): void
+        +setBack(back: NodoDoble): void
+    }
+    NodoDoble"0..1" o--> "0..1"NodoDoble: anterior
+    NodoDoble"0..1" o--> "0..1"NodoDoble: siguiente
+
+    Class ListaNodoDoble{
+        -head: NodoDoble
+        -tail: NodoDoble
+        -cantNodos: int
+
+        +ListaNodoDoble()
+    }
+    ListaNodoDoble *--> "0..1"NodoDoble: cabeza
+    ListaNodoDoble *--> "0..1"NodoDoble: cola
+
+    interface Elemento <<interface>>{
+        +esIgual(elemento: Elemento): boolean
+    }
+    Elemento"1" --* NodoDoble: contiene <
+
+    interface Coleccion <<interface>>{
+        +agregar(elemento: Elemento): boolean
+        +eliminar(elemento: Elemento): boolean
+        +contiene(elemento: Elemento): boolean
+        +vaciar(): void
+        +isVacia(): boolean
+    }
+
+    interface Lista <<interface>>{
+        +agregar(posicion: int): boolean
+        +eliminar(posicion: int): boolean
+        +obtener(posicion: int): Elemento
+        +posicionDe(elemento: Elemento): int
+    }
+    Lista ^.. ListaNodoDoble: <<implementa>>
+    Lista --^ Coleccion: <<extiende>>
+    Coleccion ..> Elemento: <<usa>>
+}
+
+Pokemon ..^ Elemento: <<implementa>>
+SistemaImpl -- ListaNodoDoble: contiene >
+@enduml
