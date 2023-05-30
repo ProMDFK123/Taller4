@@ -132,12 +132,49 @@ public class SistemaImpl implements Sistema{
 
     @Override
     public void desplegarTipo(String tipo) {
+        List<Pokemon> lista = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
 
+        for(NodoDoble aux=this.pokedex.getHead(); aux!=null; aux=aux.getNext()){
+            Pokemon pokemon = (Pokemon) aux.getElemento();
+            String tipo1 = pokemon.getTipo1();
+            String tipo2 = pokemon.getTipo2();
+
+            if(tipo.equals(tipo1) || tipo.equals(tipo2)){
+                lista.add(pokemon);
+            }
+        }
+
+        //Recorre la lista ordenada.
+        for(Pokemon auxPoke : lista){
+            sb.append("ID: ").append(auxPoke.getId()).append("\n");
+            sb.append("Nombre: ").append(auxPoke.getNombre()).append("\n");
+            sb.append("Etapa: ").append(auxPoke.getEtapa()).append("\n");
+            if(!auxPoke.getEvolucionSiguiente().equals(null)){
+                sb.append("Evolución Siguiente: ").append(Arrays.toString(auxPoke.getEvolucionSiguiente())).append("\n");
+            }
+            if(!auxPoke.getEvolucionPrevia().equals(null)){
+                sb.append("Evolución Previa: ").append(auxPoke.getEvolucionPrevia()).append("\n");
+            }
+            if(auxPoke.getTipo1().equals(auxPoke.getTipo2())){
+                sb.append("Tipo: ").append(auxPoke.getTipo1()).append("\n");
+            }else {
+                sb.append("Tipos: ").append(auxPoke.getTipo1()).append(", ").append(auxPoke.getTipo2()).append("\n");
+            }
+            sb.append("=========================================================\n");
+        }
+
+        String info = sb.toString();
+
+        print(info);
     }
 
     @Override
     public void desplegarPrimeraEvolucion() {
-
+        StringBuilder sb = new StringBuilder();
+        List<Pokemon> primeraEvo = new ArrayList<>();
+        List<String> evo = new ArrayList<>();
+        List<Integer> id = new ArrayList<>();
     }
 
     @Override
