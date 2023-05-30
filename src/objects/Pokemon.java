@@ -146,4 +146,10 @@ public class Pokemon implements Elemento{
         //No se puede comparar.
         throw new IllegalArgumentException("El elemento no es un Pokémon.");
     }
+
+    /**
+     * Método que convierte un Pokémon a Integer.
+     * @return el ID del Pokémon.
+     */
+    public int toInt(){return this.id;}
 }
