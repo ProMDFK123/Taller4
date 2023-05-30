@@ -152,4 +152,10 @@ public class Pokemon implements Elemento{
      * @return el ID del Pokémon.
      */
     public int toInt(){return this.id;}
+
+    /**
+     * Método que convierte el Pokémon en un String.
+     * @return el nombre del Pokémon.
+     */
+    public String toString(){return this.nombre;}
 }

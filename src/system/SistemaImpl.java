@@ -5,10 +5,7 @@ import list.ListaNodoDoble;
 import list.NodoDoble;
 import objects.Pokemon;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class SistemaImpl implements Sistema{
     private final ListaNodoDoble pokedex;
@@ -62,20 +59,22 @@ public class SistemaImpl implements Sistema{
             }
         }
 
+        //Recorre la lista de Pokémon ordenados.
         for(Pokemon auxPoke : pokeList){
-            pokemonInfo.append("ID: "+auxPoke.getId()+"\n");
-            pokemonInfo.append("Nombre: "+auxPoke.getNombre()+"\n");
-            pokemonInfo.append("Etapa: "+auxPoke.getEtapa()+"\n");
+            //Saca la información de cada Pokémon.
+            pokemonInfo.append("ID: ").append(auxPoke.getId()).append("\n");
+            pokemonInfo.append("Nombre: ").append(auxPoke.getNombre()).append("\n");
+            pokemonInfo.append("Etapa: ").append(auxPoke.getEtapa()).append("\n");
             if(!auxPoke.getEvolucionSiguiente().equals(null)){
-                pokemonInfo.append("Evolución Siguiente: "+auxPoke.getEvolucionSiguiente()+"\n");
+                pokemonInfo.append("Evolución Siguiente: ").append(Arrays.toString(auxPoke.getEvolucionSiguiente())).append("\n");
             }
             if(!auxPoke.getEvolucionPrevia().equals(null)){
-                pokemonInfo.append("Evolución Previa: "+auxPoke.getEvolucionPrevia()+"\n");
+                pokemonInfo.append("Evolución Previa: ").append(auxPoke.getEvolucionPrevia()).append("\n");
             }
             if(auxPoke.getTipo1().equals(auxPoke.getTipo2())){
-                pokemonInfo.append("Tipo: "+auxPoke.getTipo1()+"\n");
+                pokemonInfo.append("Tipo: ").append(auxPoke.getTipo1()).append("\n");
             }else {
-                pokemonInfo.append("Tipos: "+auxPoke.getTipo1()+", "+auxPoke.getTipo2()+"\n");
+                pokemonInfo.append("Tipos: ").append(auxPoke.getTipo1()).append(", ").append(auxPoke.getTipo2()).append("\n");
             }
             pokemonInfo.append("=========================================================\n");
         }
@@ -86,7 +85,49 @@ public class SistemaImpl implements Sistema{
 
     @Override
     public void desplegarAlfabetico() {
+        List<String> alphaName = new ArrayList<>();
+        List<Pokemon> pokemonList = new ArrayList<>();
+        StringBuilder pokemonInfo = new StringBuilder();
 
+        for(NodoDoble aux=this.pokedex.getHead(); aux!=null; aux=aux.getNext()){
+            String auxName = aux.getElemento().toString();
+            alphaName.add(auxName);
+        }
+
+        Collections.sort(alphaName);
+
+        for(String name : alphaName){
+            for(NodoDoble aux=this.pokedex.getHead(); aux!=null; aux=aux.getNext()){
+                Pokemon pkm = (Pokemon) aux.getElemento();
+
+                if(pkm.getNombre().equals(name)){
+                    pokemonList.add(pkm);
+                }
+            }
+        }
+
+        //Recorre la lista ordenada.
+        for(Pokemon auxPoke : pokemonList){
+            pokemonInfo.append("ID: ").append(auxPoke.getId()).append("\n");
+            pokemonInfo.append("Nombre: ").append(auxPoke.getNombre()).append("\n");
+            pokemonInfo.append("Etapa: ").append(auxPoke.getEtapa()).append("\n");
+            if(!auxPoke.getEvolucionSiguiente().equals(null)){
+                pokemonInfo.append("Evolución Siguiente: ").append(Arrays.toString(auxPoke.getEvolucionSiguiente())).append("\n");
+            }
+            if(!auxPoke.getEvolucionPrevia().equals(null)){
+                pokemonInfo.append("Evolución Previa: ").append(auxPoke.getEvolucionPrevia()).append("\n");
+            }
+            if(auxPoke.getTipo1().equals(auxPoke.getTipo2())){
+                pokemonInfo.append("Tipo: ").append(auxPoke.getTipo1()).append("\n");
+            }else {
+                pokemonInfo.append("Tipos: ").append(auxPoke.getTipo1()).append(", ").append(auxPoke.getTipo2()).append("\n");
+            }
+            pokemonInfo.append("=========================================================\n");
+        }
+
+        String info = pokemonInfo.toString();
+
+        print(info);
     }
 
     @Override
