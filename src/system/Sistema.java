@@ -33,13 +33,13 @@ public interface Sistema {
      * Buscar un Pokémon por su nombre.
      * @param nombre del Pokémon.
      */
-    void busquedaPersonalizada(String nombre);
+    void busquedaPersonalizada(String nombre, boolean estado);
 
     /**
      * Buscar un Pokémon por su ID.
      * @param id del Pokémon.
      */
-    void busquedaPersonalizada(int id);
+    void busquedaPersonalizada(int id, boolean estado);
 
     /**
      * Método que deja desplazar entre las evoluciónes del Pókemon.

@@ -20,16 +20,6 @@ public class Utils {
     }
 
     /**
-     * Método que valida el ID de un Pokémon.
-     * @param id del Pokémon.
-     */
-    public static void validarId(int id){
-        if(id<=0){
-            throw new IllegalArgumentException("ID inválida, intente con otra.");
-        }
-    }
-
-    /**
      * Método que valida un elemento.
      * @param elemento
      */
@@ -45,7 +35,7 @@ public class Utils {
      * @param min - valor mínimo del rango.
      * @param max - valor máximo del rango.
      */
-    public static void validarNumeroEnRango(int integer, int min, int max){
+    public static void validarNumero(int integer, int min, int max){
         if(integer<min || integer>max){
             throw new IllegalArgumentException("El número ingresado no se encuentra dentro del rango.");
         }

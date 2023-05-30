@@ -7,15 +7,15 @@ public class Pokemon implements Elemento{
     private int id;
     private String nombre;
     private String etapa;
-    private String[] evolucionSiguiente;
+    private String evolucionSiguiente;
     private String evolucionPrevia;
     private String tipo1;
     private String tipo2;
 
-    public Pokemon(int id, String nombre, String etapa, String[] evolucionSiguiente, String evolucionPrevia, String tipo1, String tipo2) {
+    public Pokemon(int id, String nombre, String etapa, String evolucionSiguiente, String evolucionPrevia, String tipo1, String tipo2) {
         //Valida la ID.
         try{
-            Utils.validarId(id);
+            Utils.validarNumero(id,1,151);
         }catch (IllegalArgumentException ex){
             System.out.println("Ha ocurrido un error: "+ex);
         }
@@ -84,7 +84,7 @@ public class Pokemon implements Elemento{
     /**
      * @return las posibles evoluciones.
      */
-    public String[] getEvolucionSiguiente() {
+    public String getEvolucionSiguiente() {
         return evolucionSiguiente;
     }
 
@@ -158,4 +158,16 @@ public class Pokemon implements Elemento{
      * @return el nombre del Pokémon.
      */
     public String toString(){return this.nombre;}
+
+    /**
+     * Método que verifica si el Pokémon tiene o no una evolución.
+     * @return true si tiene evolución, false en caso contrario.
+     */
+    public boolean tieneEvo(){return this.getEvolucionSiguiente()!=null;}
+
+    /**
+     * Método que verifica si el Pokémon evolucionó de otro o no.
+     * @return true si es una evolución, false en caso contrario.
+     */
+    public boolean esEvo(){return this.getEvolucionPrevia()!=null;}
 }

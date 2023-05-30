@@ -142,7 +142,7 @@ public class ListaNodoDoble implements Lista{
     public boolean agregar(int posicion, Elemento elemento) {
         //Valida el valor de la posición.
         try{
-            Utils.validarNumeroEnRango(posicion,0,this.cantNodos);
+            Utils.validarNumero(posicion,0,this.cantNodos);
         }catch (IllegalArgumentException ex){
             System.out.println("Ha ocurrido un error: "+ex);
         }
@@ -207,7 +207,7 @@ public class ListaNodoDoble implements Lista{
     public boolean eliminar(int posicion) {
         //Valida la posición.
         try {
-            Utils.validarNumeroEnRango(posicion,0,this.cantNodos-1);
+            Utils.validarNumero(posicion,0,this.cantNodos-1);
         }catch (IllegalArgumentException ex){
             System.out.println("Ha ocurrido un error: "+ex);
         }
@@ -255,6 +255,13 @@ public class ListaNodoDoble implements Lista{
      */
     @Override
     public int posicionDe(Elemento elemento) {
+        //Valida el elemento.
+        try {
+            Utils.validarElemento(elemento);
+        }catch (IllegalArgumentException ex){
+            System.out.println("Ha ocurrido un error: "+ex);
+        }
+
         int auxPos=0;
 
         //Busca el elemento.
@@ -275,7 +282,7 @@ public class ListaNodoDoble implements Lista{
     public Elemento obtener(int posicion) {
         //Valida la posición.
         try {
-            Utils.validarNumeroEnRango(posicion,0,this.cantNodos-1);
+            Utils.validarNumero(posicion,0,this.cantNodos-1);
         }catch (IllegalArgumentException ex){
             System.out.println("Ha ocurrido un error: "+ex);
         }
