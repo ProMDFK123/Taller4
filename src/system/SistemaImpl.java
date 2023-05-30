@@ -5,7 +5,6 @@ import list.Elemento;
 import list.ListaNodoDoble;
 import list.NodoDoble;
 import objects.Pokemon;
-import java.util.Scanner;
 import java.util.*;
 
 public class SistemaImpl implements Sistema{
@@ -18,6 +17,8 @@ public class SistemaImpl implements Sistema{
     public void menu(){
 
     }
+
+    public void leerArchivo(String direccionArchivo){}
 
     /**
      * Método que despliega una lista de Pokémon dado un rango de ID.

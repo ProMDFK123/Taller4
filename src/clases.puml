@@ -19,6 +19,10 @@ package objects{
         +getEvolucionPrevia(): String
         +getTipo1(): String
         +getTipo2(): String
+        +toInt(): int
+        +toString(): String
+        +tieneEvo(): boolean
+        +esEvo(): boolean
     }
 }
 
@@ -28,8 +32,8 @@ package system{
         +desplegarAlfabetico(): void
         +desplegarTipo(tipo String): void
         +desplegarPrimeraEvolucion(): void
-        +busquedaPersonalizada(nombre: String): void
-        +busquedaPersonalizada(id: int): void
+        +busquedaPersonalizada(nombre: String, estado: boolean): void
+        +busquedaPersonalizada(id: int, estado: boolean): void
         +desplegarEvolucion(pokemon: Pokemon): void
         +salir(estado: boolean): boolean
     }
@@ -40,15 +44,16 @@ package system{
         +SistemaImpl()
         +menu(): void
         +leerArchivo(String direccionArchivo): void
+        +subMenu(): void
+        +print(string: String): void
     }
     SistemaImpl ..^ Sistema: <<implementa>>
 
     Class Utils{
         -Utils()
         +validarString(string: String): void
-        +validarId(id: int): void
         +validarElemento(elemento: Elemento): void
-        +validarNumeroEnRango(integer: int, min: int, max: int): void
+        +validarNumero(integer: int, min: int, max: int): void
     }
 }
 
@@ -68,18 +73,6 @@ package list{
     NodoDoble"0..1" o--> "0..1"NodoDoble: anterior
     NodoDoble"0..1" o--> "0..1"NodoDoble: siguiente
 
-    Class ListaPokemon{
-        -lista: Pokemon[]
-        -actual: int
-        -max: int
-
-        +ListaPokemon(max: int)
-        +getMax(): int
-        +getActual(): int
-        +agregar(pokemon: Pokemon): void
-        +eliminar(pokemon: Pokemon): void
-        +obtener(posicion: int): Pokemon
-    }
 
     Class ListaNodoDoble{
         -head: NodoDoble
@@ -121,5 +114,4 @@ package list{
 
 Pokemon ..^ Elemento: <<implementa>>
 SistemaImpl -- ListaNodoDoble: contiene >
-Pokemon"*" o--* "1"ListaPokemon: contiene <
 @enduml
