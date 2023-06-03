@@ -3,15 +3,49 @@ package objects;
 import list.Elemento;
 import system.Utils;
 
+/**
+ * clase Pokemón
+ */
 public class Pokemon implements Elemento{
+    /**
+     * numero de identificacion del pokemón
+     */
     private int id;
+    /**
+     * Nombre del pokemón
+     */
     private String nombre;
+    /**
+     * etapa actual del pokemón
+     */
     private String etapa;
+    /**
+     * La siguiente evolucion del pokemón
+     */
     private String evolucionSiguiente;
+    /**
+     * la evolucion previa del pokemón
+     */
     private String evolucionPrevia;
+    /**
+     * el primer tipo del pokemón
+     */
     private String tipo1;
+    /**
+     * el segundo tipo del pokemón
+     */
     private String tipo2;
 
+    /**
+     * CONSTRUCTOR
+     * @param id identificacion del pokemón
+     * @param nombre nombre del pokemon
+     * @param etapa etapa actual del pokemon
+     * @param evolucionSiguiente evolucion siguiente del pokemon
+     * @param evolucionPrevia evolucion previa del pokemon
+     * @param tipo1 primer tipo del pokemon
+     * @param tipo2 segundo tipo del pokemon
+     */
     public Pokemon(int id, String nombre, String etapa, String evolucionSiguiente, String evolucionPrevia, String tipo1, String tipo2) {
         //Valida la ID.
         try{
@@ -57,53 +91,59 @@ public class Pokemon implements Elemento{
         this.tipo2 = tipo2;
     }
 
-
     //Los Getter's.
 
     /**
-     * @return la ID.
+     * metodo que retorna la id del pokemon
+     * @return id del pokemon
      */
     public int getId() {
         return id;
     }
 
     /**
-     * @return el nombre del Pokémon.
+     * metodo que retorna e lnombre del pokemon
+     * @return nombre del pokemon
      */
     public String getNombre() {
         return nombre;
     }
 
     /**
-     * @return la etapa en que se encuentra el Pokémon.
+     * metodo que retorna la etapa actual del pokemon
+     * @return etapa del pokemon
      */
     public String getEtapa() {
         return etapa;
     }
 
     /**
-     * @return las posibles evoluciones.
+     * metodo que retorna la evolucion siguiente del pokemon
+     * @return evolucion siguiente
      */
     public String getEvolucionSiguiente() {
         return evolucionSiguiente;
     }
 
     /**
-     * @return la pre-evolución del Pokémon.
+     * metodo que retorna la evolucion previa del pokemon
+     * @return evolucion previa
      */
     public String getEvolucionPrevia() {
         return evolucionPrevia;
     }
 
     /**
-     * @return el primer tipo del Pokémon.
+     * metodo que retorna el primer tipo del pokemon
+     * @return primer tipo del pokemon
      */
     public String getTipo1() {
         return tipo1;
     }
 
     /**
-     * @return el segundo tipo del Pokémon.
+     * metodo que retorna el segundo tipo del pokemon
+     * @return segundo tipo del pokemon
      */
     public String getTipo2() {
         return tipo2;
@@ -116,12 +156,15 @@ public class Pokemon implements Elemento{
      */
     @Override
     public boolean esIgual(Elemento elemento) {
-        if(this==elemento){
+
+        //si el elemento ingresado es igual al que hay, retorna true
+        if(this == elemento){
             return true;
         }
 
+        //si el elemento ingresado es instanciado como pokemón
         if(elemento instanceof Pokemon pokemon){
-            return this.id== pokemon.id;
+            return this.id == pokemon.id;
         }
         return false;
     }
@@ -133,6 +176,7 @@ public class Pokemon implements Elemento{
      */
     @Override
     public int compararCon(Elemento elemento) {
+
         //Comparación consigo mismo.
         if(this==elemento){
             return 0;

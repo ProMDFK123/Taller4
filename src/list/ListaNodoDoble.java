@@ -6,17 +6,24 @@ import system.Utils;
  * Clase que almacena un conjunto de nodos.
  */
 public class ListaNodoDoble implements Lista{
-    //Primer nodo de la lista.
+
+    /**
+     * La cabeza de los nodos
+     */
     private NodoDoble head;
 
-    //Ultimo nodo de la lista.
+    /**
+     * la cola de los nodos
+     */
     private NodoDoble tail;
 
-    //Cantidad de elementos en la lista.
+    /**
+     * cantidad total de nodos en la lista
+     */
     private int cantNodos;
 
     /**
-     * Constructor de una lista.
+     * CONSTRUCTOR
      */
     public ListaNodoDoble() {
         this.head=null;
@@ -117,12 +124,15 @@ public class ListaNodoDoble implements Lista{
      */
     @Override
     public boolean contiene(Elemento elemento) {
+
+        //primero se verifica si el elemento es valido
         try{
             Utils.validarElemento(elemento);
         }catch (IllegalArgumentException ex){
             System.out.println("Ha ocurrido un error: "+ex);
         }
 
+        //se busca en la lista el elemento a buscar
         for(NodoDoble aux = this.head; aux!=null; aux=aux.getNext()){
             if(aux.getElemento().esIgual(elemento)){
                 return true;
@@ -132,12 +142,25 @@ public class ListaNodoDoble implements Lista{
         return false;
     }
 
+    /**
+     * metodo que vacía la lista de nodos
+     */
     @Override
     public void vaciar() {this.head=null;}
 
+    /**
+     * metodo que verifica si la lista está vacia
+     * @return true si está vacia, false si no
+     */
     @Override
     public boolean isVacia() {return this.head==null;}
 
+    /**
+     * metodo que agrega un nodo por posicion
+     * @param posicion la posicion donde se quiere agregar el elemento
+     * @param elemento elemento del nodo
+     * @return true si se pudo, false si no
+     */
     @Override
     public boolean agregar(int posicion, Elemento elemento) {
         //Valida el valor de la posición.
@@ -203,6 +226,11 @@ public class ListaNodoDoble implements Lista{
         return false;
     }
 
+    /**
+     * metodo que elimina un nodo por posicion
+     * @param posicion posicion del nodo a eliminar
+     * @return true si se pudo, false si no
+     */
     @Override
     public boolean eliminar(int posicion) {
         //Valida la posición.
@@ -278,6 +306,11 @@ public class ListaNodoDoble implements Lista{
         return -1;
     }
 
+    /**
+     * metodo que obtiene un elemento segun la posicion asignada
+     * @param posicion posicion del elemento a obtener
+     * @return el elemento
+     */
     @Override
     public Elemento obtener(int posicion) {
         //Valida la posición.
@@ -304,21 +337,24 @@ public class ListaNodoDoble implements Lista{
     //Los Getter's
 
     /**
-     * @return la cabeza de la lista.
+     * metodo que retorna la cabeza
+     * @return la cabeza
      */
     public NodoDoble getHead() {
         return head;
     }
 
     /**
-     * @return la cola de la lista.
+     * metodo que retorna la cola
+     * @return la cola
      */
     public NodoDoble getTail() {
         return tail;
     }
 
     /**
-     * @return la cantidad de elementos en la lista.
+     * metodo que retorna la cantidad total de nodos
+     * @return cantidad actual de nodos
      */
     public int getCantNodos() {
         return cantNodos;

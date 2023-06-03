@@ -54,3 +54,4 @@ public interface Sistema {
      */
     boolean salir(boolean estado);
 }
+

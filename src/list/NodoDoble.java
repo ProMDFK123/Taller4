@@ -6,42 +6,60 @@ import system.Utils;
  * Clase de un nodo doble.
  */
 public class NodoDoble {
-    //Elemento a guardar.
+
+    /**
+     * Elemento guardado
+     */
     private Elemento elemento;
 
-    //Nodo siguiente.
+    /**
+     * El nodo siguiente
+     */
     private NodoDoble next;
 
-    //Nodo anterior.
+    /**
+     * el nodo anterior
+     */
     private NodoDoble back;
 
+    /**
+     * CONSTRUCTOR
+     * @param elemento elemento a guardar
+     */
     public NodoDoble(Elemento elemento) {
+
+        //Validacion del elemento a guardar
         try{
             Utils.validarElemento(elemento);
         }catch (IllegalArgumentException ex){
             System.out.println("Ha ocurrido un error: "+ex);
         }
+
+        //se guarda el elemento
         this.elemento = elemento;
     }
 
     //Los Getter's
 
     /**
-     * @return el elemento almacenado.
+     * metodo que retorna el elemento
+     * @return el elemento
      */
     public Elemento getElemento() {
         return elemento;
     }
 
     /**
-     * @return el nodo siguiente.
+     * metodo que retorna el siguiente nodo
+     * @return el siguiente nodo
      */
     public NodoDoble getNext() {
         return next;
     }
 
     /**
-     * @return el nodo anterior.
+     * metodo que retorna el nodo anterior
+     * @return el nodo anterior
      */
     public NodoDoble getBack() {
         return back;

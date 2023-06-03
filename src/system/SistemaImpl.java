@@ -1,24 +1,201 @@
 package system;
 
-import edu.princeton.cs.stdlib.StdIn;
 import list.Elemento;
 import list.ListaNodoDoble;
 import list.NodoDoble;
 import objects.Pokemon;
-import java.util.*;
+import ucn.ArchivoEntrada;
+import ucn.Registro;
+import ucn.StdIn;
+import ucn.StdOut;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+/**
+ * clase que implementa el sistema
+ */
 public class SistemaImpl implements Sistema{
+
+    /**
+     * la lista de los nodos
+     */
     private final ListaNodoDoble pokedex;
+
+    /**
+     * CONSTRUCTOR
+     */
     public SistemaImpl(){
-        pokedex=new ListaNodoDoble();
+        this.pokedex = new ListaNodoDoble();
         this.menu();
     }
 
+    /**
+     * metodo que contiene el menu
+     */
     public void menu(){
+
+        //para inicializar la variable
+        int opcionInt = -2;
+
+        while(true) {
+            StdOut.println("\n ~ ~ ~ ~ ~ POKEDEX ~ ~ ~ ~ ~ ");
+            StdOut.println("""
+                                    
+                    ¿Qué desea hacer?
+                                    
+                    [1] Desplegar pokemones dado un rango y su ID
+                    [2] Desplegar los pokemones alfabeticamente
+                    [3] Desplegar pokemones por tipo
+                    [4] Desplegar pokemomes de primera evolución
+                    [5] Busqueda personalizada
+                    [6] Cerrar la pokedex
+                    """);
+            StdOut.print("ingrese su opción: ");
+
+            //validacion de opcion de entrada
+            try {
+                String opcion = StdIn.readString();
+                opcionInt = Integer.parseInt(opcion);
+
+            }catch (Exception e){
+                StdOut.println("Ingrese un dato válido");
+                continue;
+            }
+
+            //si la opcion es distinta de -2 acceso a las opciones
+            if(opcionInt != -2) {
+
+                switch (opcionInt) {
+
+                    case 1: //Desplegar pokemones dado un rango y su ID
+
+                        break;
+
+                    case 2: //Desplegar los pokemones alfabeticamente
+
+                        break;
+
+                    case 3: //Desplegar pokemones por tipo
+
+                        break;
+
+                    case 4: //Desplegar pokemomes de primera evolución
+
+                        break;
+
+                    case 5: //Busqueda personalizada
+
+                        break;
+
+                    case 6: //Cerrar la pokedex
+                        StdOut.println("Cerrando pokedex...");
+                        break;
+
+                    default:
+                        StdOut.println("Ingrese una opción váida");
+                }
+            }
+
+            //si se escogio la opcion 6, se cierra el programa
+            if(opcionInt==6){
+                break;
+            }
+
+        }
 
     }
 
-    public void leerArchivo(String direccionArchivo){}
+    //TODO TERMINAR
+    /**
+     * metodo que lee el archivo KANTO
+     */
+    public void leerArchivo(){
+
+        //validar existencia del archivo
+        ArchivoEntrada archivoEntrada;
+        try{
+            archivoEntrada = new ArchivoEntrada("Kanto.txt");
+
+        }catch (Exception e){
+            StdOut.println("El archivo no existe");
+            return;
+        }
+
+        //si el archivo existe, leerlo
+
+        while (archivoEntrada.isEndFile()){
+
+            //verificar si el pokemón tiene campos validos
+            try{
+
+                Registro registro = archivoEntrada.getRegistro();
+
+                //DATOS DEL POKEMON : ID,Nombre,Etapa,Evolución Siguiente,Evolución Previa,Tipo 1,Tipo 2
+
+
+                //el .strip() elimina los espacios delante y detras de un registro
+                String id = registro.getString().strip();
+
+                //TODO HACER VALIDACION DE SALTOS DE LINEAS EN EL ARCHIVO
+                //supuesta validacio nde saltos de linea, comprobarlo
+                if(id.equalsIgnoreCase("")){
+                    break;
+                }
+
+                String nombre = registro.getString().strip();
+                String etapa = registro.getString().strip();
+                String evolucionSiguiente = registro.getString().strip();
+                String evolucionPrevia = registro.getString().strip();
+                String tipo1 = registro.getString().strip();
+                String tipo2 = registro.getString().strip();
+
+
+                //VALIDACIONES DE DATOS DE ENTRADA
+
+                //validar que el id sean numero y que estén dentro del rango
+                int idInt = Integer.parseInt(id);
+                if(idInt < 1 || idInt > 151){
+                    throw new Exception  ("El pokemón tiene un id inválido");
+                }
+
+                //validar la etapa del pokemon
+                if(!etapa.equalsIgnoreCase("basico") && !etapa.equalsIgnoreCase("primera evolucion") && !etapa.equalsIgnoreCase("segunda evolucion") ){
+                    throw  new Exception("El pokemón tiene una etapa inválida");
+                }
+
+
+                //validar primer y segundo tipo del pokemon
+                if(tipo1.length()==0){
+                    throw new Exception("El pokemón debe tener almenos 1 tipo.");
+
+                }else if(!validarTipoPokemon(tipo1)){
+                    throw new Exception("El tipo del pokemon no existe");
+
+                    //si el tipo 1 existe, pregunto si tiene un segundo
+                } else if (validarTipoPokemon(tipo1)) {
+
+                    //si el segundo tipo no existe, se arroja error
+                    if(!validarTipoPokemon(tipo2) || !tipo2.equalsIgnoreCase("")){
+                        throw new Exception("El segundo tipo del pokemón no existe");
+                    }
+                }
+
+                //si las validaciones están correctas, se crea el pokemón
+                Pokemon pokemon = new Pokemon(idInt,nombre,etapa,evolucionSiguiente,evolucionPrevia,tipo1,tipo2);
+                pokedex.agregar(pokemon);
+
+
+                //error de pokemon con campos invalidos
+            }catch(Exception e){
+                StdOut.println(" |!| Pokemón con campos inválidos |!| ");
+            }
+        }
+
+
+    }
 
     /**
      * Método que despliega una lista de Pokémon dado un rango de ID.
@@ -318,7 +495,7 @@ public class SistemaImpl implements Sistema{
     }
 
     /**
-     * Submenú.
+     * Menú de busqueda personalizada
      */
     public void subMenu(){
         String menu = """
@@ -346,7 +523,10 @@ public class SistemaImpl implements Sistema{
      * @return false para salir.
      */
     @Override
-    public boolean salir(boolean estado) {return !estado;}
+    public boolean salir(boolean estado) {
+
+        return !estado;
+    }
 
     /**
      * Método auxiliar para imprimir.
@@ -354,5 +534,26 @@ public class SistemaImpl implements Sistema{
      */
     public void print(String string){
         System.out.println(string);
+    }
+
+    /**
+     * metodo que valida el tipo de un pokemon
+     * @param tipoIngresado el tipo que se ingresa
+     * @return true si existe, false si no
+     */
+    public boolean validarTipoPokemon(String tipoIngresado){
+
+        //todos los tipos de pokemon que existen.
+        String tiposDePokemon[] = {"normal","Bicho", "Dragón", "Eléctrico", "Hada", "Lucha", "Fuego", "Volador", "Fantasma", "Planta", "Tierra", "Hielo", "Normal", "Veneno", "Psíquico", "Roca", "Acero y Agua"};
+
+        //preguntar si el tipo ingresado es alguno de los 19 que existen
+        for (int i = 0; i <tiposDePokemon.length ; i++) {
+
+            if(!tipoIngresado.equalsIgnoreCase(tiposDePokemon[i])){
+                return false;
+            }
+        }
+
+        return true;
     }
 }
