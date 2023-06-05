@@ -72,14 +72,65 @@ public class SistemaImpl implements Sistema{
 
                     case 1: //Desplegar pokemones dado un rango y su ID
 
+                        StdOut.println("Desplegar pokemones dado un rango y su ID: \n");
+
+                        int minimo = 0;
+                        int maximo = 0;
+
+                        while(true) {
+                            try {
+                                StdOut.println("Ingrese el número Mínimo de despliegue (minimo 0): ");
+                                String minimoString = StdIn.readString();
+                                minimo = Integer.parseInt(minimoString);
+                            } catch (Exception e) {
+                                print("Ingrese un dato válido");
+                                continue;
+                            }
+                            if(minimo<0 || minimo>151){
+                                print("Ingrese un rango válido (desde 0 a 151)");
+                                continue;
+                            }
+                            break;
+                        }
+
+                        while(true) {
+                            try {
+                                StdOut.println("Ingrese el número Máximo de despliegue: ");
+                                String maximoString = StdIn.readString();
+                                maximo = Integer.parseInt(maximoString);
+                            } catch (Exception e) {
+                                print("Ingrese un dato válido");
+                                continue;
+                            }
+                            if(maximo<0 || maximo>151){
+                                print("Ingrese un rango válido (desde 0 a 151)");
+                                continue;
+                            }
+                            break;
+                        }
+                        desplegarPokemon(minimo,maximo);
+
                         break;
 
                     case 2: //Desplegar los pokemones alfabeticamente
+                        print("Desplegar pokemones alfabéticamente: \n");
+                        desplegarAlfabetico();
 
                         break;
 
                     case 3: //Desplegar pokemones por tipo
+                        while(true) {
+                            print("Desplegar pokemón po su tipo: \n");
+                            print("Ingrese el tipo del pokemón a buscar: ");
+                            String tipo = StdIn.readString();
 
+                            if (validarTipoPokemon(tipo)) {
+                                desplegarTipo(tipo);
+                                break;
+                            } else {
+                                print("Ingrese un tipo de pokemón válido.");
+                            }
+                        }
                         break;
 
                     case 4: //Desplegar pokemomes de primera evolución
@@ -203,12 +254,12 @@ public class SistemaImpl implements Sistema{
     }
 
     /**
-     * Método que despliega una lista de Pokémon dado un rango de ID.
-     * @param idInicio - valor inicial del rango.
-     * @param idFin - valor final del rango.
+     * Método que despliega una lista de Pokémon dado un rango.
+     * @param Inicio - valor inicial del rango.
+     * @param Fin - valor final del rango.
      */
     @Override
-    public void desplegarPokemon(int idInicio, int idFin) {
+    public void desplegarPokemon(int Inicio, int Fin) {
         //Variables y listas auxiliares del método.
         List<Pokemon> pokeList = new ArrayList<>();
         List<Integer> listaAux = new ArrayList<>();
