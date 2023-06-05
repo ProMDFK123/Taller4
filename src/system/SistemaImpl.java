@@ -168,17 +168,20 @@ public class SistemaImpl implements Sistema{
 
 
                 //validar primer y segundo tipo del pokemon
-                if(tipo1.length()==0){
-                    throw new Exception("El pokemón debe tener almenos 1 tipo.");
+                try{
+                    Utils.validarString(tipo1);
+                }catch (IllegalArgumentException ex) {
+                    StdOut.println("El pokemón debe tener almenos 1 tipo.");
+                }
 
-                }else if(!validarTipoPokemon(tipo1)){
+                if(!Utils.validarTipoPokemon(tipo1)){
                     throw new Exception("El tipo del pokemon no existe");
 
                     //si el tipo 1 existe, pregunto si tiene un segundo
-                } else if (validarTipoPokemon(tipo1)) {
+                } else if (Utils.validarTipoPokemon(tipo1)) {
 
                     //si el segundo tipo no existe, se arroja error
-                    if(!validarTipoPokemon(tipo2) || !tipo2.equalsIgnoreCase("")){
+                    if(!Utils.validarTipoPokemon(tipo2) || !tipo2.equalsIgnoreCase("")){
                         throw new Exception("El segundo tipo del pokemón no existe");
                     }
                 }
@@ -534,26 +537,5 @@ public class SistemaImpl implements Sistema{
      */
     public void print(String string){
         System.out.println(string);
-    }
-
-    /**
-     * metodo que valida el tipo de un pokemon
-     * @param tipoIngresado el tipo que se ingresa
-     * @return true si existe, false si no
-     */
-    public boolean validarTipoPokemon(String tipoIngresado){
-
-        //todos los tipos de pokemon que existen.
-        String tiposDePokemon[] = {"normal","Bicho", "Dragón", "Eléctrico", "Hada", "Lucha", "Fuego", "Volador", "Fantasma", "Planta", "Tierra", "Hielo", "Normal", "Veneno", "Psíquico", "Roca", "Acero y Agua"};
-
-        //preguntar si el tipo ingresado es alguno de los 19 que existen
-        for (int i = 0; i <tiposDePokemon.length ; i++) {
-
-            if(!tipoIngresado.equalsIgnoreCase(tiposDePokemon[i])){
-                return false;
-            }
-        }
-
-        return true;
     }
 }
