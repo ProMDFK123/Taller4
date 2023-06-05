@@ -157,12 +157,14 @@ public class SistemaImpl implements Sistema{
 
                 //validar que el id sean numero y que estén dentro del rango
                 int idInt = Integer.parseInt(id);
-                if(idInt < 1 || idInt > 151){
-                    throw new Exception  ("El pokemón tiene un id inválido");
+                try{
+                    Utils.validarNumero(idInt,1,151);
+                }catch (IllegalArgumentException ex){
+                    print("Ha ocurrido un error: "+ex);
                 }
 
                 //validar la etapa del pokemon
-                if(!etapa.equalsIgnoreCase("basico") && !etapa.equalsIgnoreCase("primera evolucion") && !etapa.equalsIgnoreCase("segunda evolucion") ){
+                if(!Utils.validarEtapa(etapa)){
                     throw  new Exception("El pokemón tiene una etapa inválida");
                 }
 
