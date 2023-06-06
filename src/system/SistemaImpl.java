@@ -4,11 +4,9 @@ import list.Elemento;
 import list.ListaNodoDoble;
 import list.NodoDoble;
 import objects.Pokemon;
-import ucn.ArchivoEntrada;
-import ucn.Registro;
-import ucn.StdIn;
-import ucn.StdOut;
+import ucn.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -27,8 +25,9 @@ public class SistemaImpl implements Sistema{
     /**
      * CONSTRUCTOR
      */
-    public SistemaImpl(){
+    public SistemaImpl() throws IOException {
         this.pokedex = new ListaNodoDoble();
+        leerArchivo();
         this.menu();
     }
 
@@ -113,18 +112,23 @@ public class SistemaImpl implements Sistema{
                         break;
 
                     case 2: //Desplegar los pokemones alfabeticamente
-                        print("Desplegar pokemones alfabéticamente: \n");
+                        print("\n ..::.. Desplegar pokemones alfabéticamente ..::.. \n");
                         desplegarAlfabetico();
 
                         break;
 
                     case 3: //Desplegar pokemones por tipo
+
                         while(true) {
-                            print("Desplegar pokemón po su tipo: \n");
-                            print("Ingrese el tipo del pokemón a buscar: ");
+                            print("\n ..::.. Desplegar pokemón por su tipo ..::.. \n");
+                            print("Ingrese el tipo del pokemón a buscar: (0 para volver)");
                             String tipo = StdIn.readString();
 
-                            if (validarTipoPokemon(tipo)) {
+                            if(tipo.equalsIgnoreCase("0")){
+                                break;
+                            }else if (validarTipoPokemon(tipo)) {
+
+                                print("Éstos son los pokemónes de tipo " + tipo + ": ");
                                 desplegarTipo(tipo);
                                 break;
                             } else {
@@ -163,10 +167,11 @@ public class SistemaImpl implements Sistema{
     /**
      * metodo que lee el archivo KANTO
      */
-    public void leerArchivo(){
+    public void leerArchivo() throws IOException {
 
         //validar existencia del archivo
         ArchivoEntrada archivoEntrada;
+
         try{
             archivoEntrada = new ArchivoEntrada("Kanto.txt");
 
@@ -175,27 +180,18 @@ public class SistemaImpl implements Sistema{
             return;
         }
 
-        //si el archivo existe, leerlo
 
-        while (archivoEntrada.isEndFile()){
+        while (!archivoEntrada.isEndFile()){
 
             //verificar si el pokemón tiene campos validos
             try{
 
                 Registro registro = archivoEntrada.getRegistro();
 
-                //DATOS DEL POKEMON : ID,Nombre,Etapa,Evolución Siguiente,Evolución Previa,Tipo 1,Tipo 2
-
-
-                //el .strip() elimina los espacios delante y detras de un registro
-                String id = registro.getString().strip();
-
                 //TODO HACER VALIDACION DE SALTOS DE LINEAS EN EL ARCHIVO
-                //supuesta validacio nde saltos de linea, comprobarlo
-                if(id.equalsIgnoreCase("")){
-                    break;
-                }
+                //el .strip() elimina los espacios delante y detras de un registro
 
+                String id = registro.getString().strip();
                 String nombre = registro.getString().strip();
                 String etapa = registro.getString().strip();
                 String evolucionSiguiente = registro.getString().strip();
@@ -217,7 +213,6 @@ public class SistemaImpl implements Sistema{
                     throw  new Exception("El pokemón tiene una etapa inválida");
                 }
 
-
                 //validar primer y segundo tipo del pokemon
                 if(tipo1.length()==0){
                     throw new Exception("El pokemón debe tener almenos 1 tipo.");
@@ -237,6 +232,7 @@ public class SistemaImpl implements Sistema{
                 //si las validaciones están correctas, se crea el pokemón
                 Pokemon pokemon = new Pokemon(idInt,nombre,etapa,evolucionSiguiente,evolucionPrevia,tipo1,tipo2);
                 pokedex.agregar(pokemon);
+
 
 
                 //error de pokemon con campos invalidos
@@ -362,6 +358,7 @@ public class SistemaImpl implements Sistema{
 
     @Override
     public void desplegarTipo(String tipo) {
+
         List<Pokemon> lista = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
 
@@ -595,16 +592,16 @@ public class SistemaImpl implements Sistema{
     public boolean validarTipoPokemon(String tipoIngresado){
 
         //todos los tipos de pokemon que existen.
-        String tiposDePokemon[] = {"normal","Bicho", "Dragón", "Eléctrico", "Hada", "Lucha", "Fuego", "Volador", "Fantasma", "Planta", "Tierra", "Hielo", "Normal", "Veneno", "Psíquico", "Roca", "Acero y Agua"};
+        String tiposDePokemon[] = {"normal","bicho", "dragón", "electrico", "hada", "lucha", "fuego", "volador", "fantasma", "planta", "tierra", "hielo", "veneno", "psíquico", "roca", "acero", "agua"};
 
         //preguntar si el tipo ingresado es alguno de los 19 que existen
         for (int i = 0; i <tiposDePokemon.length ; i++) {
 
-            if(!tipoIngresado.equalsIgnoreCase(tiposDePokemon[i])){
-                return false;
+            if(tipoIngresado.equalsIgnoreCase(tiposDePokemon[i])){
+                return true;
             }
         }
 
-        return true;
+        return false;
     }
 }
