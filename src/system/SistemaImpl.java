@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * clase que implementa el sistema
  */
-public class SistemaImpl implements Sistema{
+public class SistemaImpl implements Sistema {
 
     /**
      * la lista de los nodos
@@ -26,20 +26,22 @@ public class SistemaImpl implements Sistema{
      * CONSTRUCTOR
      */
     public SistemaImpl() throws IOException {
+
         this.pokedex = new ListaNodoDoble();
         leerArchivo();
+        this.leerArchivo();
         this.menu();
     }
 
     /**
      * metodo que contiene el menu
      */
-    public void menu(){
+    public void menu() {
 
         //para inicializar la variable
         int opcionInt = -2;
 
-        while(true) {
+        while (true) {
             StdOut.println("\n ~ ~ ~ ~ ~ POKEDEX ~ ~ ~ ~ ~ ");
             StdOut.println("""
                                     
@@ -59,13 +61,13 @@ public class SistemaImpl implements Sistema{
                 String opcion = StdIn.readString();
                 opcionInt = Integer.parseInt(opcion);
 
-            }catch (Exception e){
+            } catch (Exception e) {
                 StdOut.println("Ingrese un dato válido");
                 continue;
             }
 
             //si la opcion es distinta de -2 acceso a las opciones
-            if(opcionInt != -2) {
+            if (opcionInt != -2) {
 
                 switch (opcionInt) {
 
@@ -76,7 +78,7 @@ public class SistemaImpl implements Sistema{
                         int minimo = 0;
                         int maximo = 0;
 
-                        while(true) {
+                        while (true) {
                             try {
                                 StdOut.println("Ingrese el número Mínimo de despliegue (minimo 0): ");
                                 String minimoString = StdIn.readString();
@@ -85,14 +87,14 @@ public class SistemaImpl implements Sistema{
                                 print("Ingrese un dato válido");
                                 continue;
                             }
-                            if(minimo<0 || minimo>151){
+                            if (minimo < 0 || minimo > 151) {
                                 print("Ingrese un rango válido (desde 0 a 151)");
                                 continue;
                             }
                             break;
                         }
 
-                        while(true) {
+                        while (true) {
                             try {
                                 StdOut.println("Ingrese el número Máximo de despliegue: ");
                                 String maximoString = StdIn.readString();
@@ -101,13 +103,13 @@ public class SistemaImpl implements Sistema{
                                 print("Ingrese un dato válido");
                                 continue;
                             }
-                            if(maximo<0 || maximo>151){
+                            if (maximo < 0 || maximo > 151) {
                                 print("Ingrese un rango válido (desde 0 a 151)");
                                 continue;
                             }
                             break;
                         }
-                        desplegarPokemon(minimo,maximo);
+                        desplegarPokemon(minimo, maximo);
 
                         break;
 
@@ -119,21 +121,27 @@ public class SistemaImpl implements Sistema{
 
                     case 3: //Desplegar pokemones por tipo
 
-                        while(true) {
+                        while (true) {
                             print("\n ..::.. Desplegar pokemón por su tipo ..::.. \n");
                             print("Ingrese el tipo del pokemón a buscar: (0 para volver)");
                             String tipo = StdIn.readString();
 
-                            if(tipo.equalsIgnoreCase("0")){
+
+                            if (tipo.equalsIgnoreCase("0")) {
                                 break;
-                            }else if (validarTipoPokemon(tipo)) {
+                            } else if (validarTipoPokemon(tipo)) {
 
                                 print("Éstos son los pokemónes de tipo " + tipo + ": ");
-                                desplegarTipo(tipo);
-                                break;
-                            } else {
-                                print("Ingrese un tipo de pokemón válido.");
+
+                                if (Utils.validarTipoPokemon(tipo)) {
+
+                                    desplegarTipo(tipo);
+                                    break;
+                                } else {
+                                    print("Ingrese un tipo de pokemón válido.");
+                                }
                             }
+                            break;
                         }
                         break;
 
@@ -146,6 +154,7 @@ public class SistemaImpl implements Sistema{
                         break;
 
                     case 6: //Cerrar la pokedex
+
                         StdOut.println("Cerrando pokedex...");
                         break;
 
@@ -155,7 +164,7 @@ public class SistemaImpl implements Sistema{
             }
 
             //si se escogio la opcion 6, se cierra el programa
-            if(opcionInt==6){
+            if (opcionInt == 6) {
                 break;
             }
 
@@ -163,7 +172,6 @@ public class SistemaImpl implements Sistema{
 
     }
 
-    //TODO TERMINAR
     /**
      * metodo que lee el archivo KANTO
      */
@@ -172,19 +180,18 @@ public class SistemaImpl implements Sistema{
         //validar existencia del archivo
         ArchivoEntrada archivoEntrada;
 
-        try{
+        try {
             archivoEntrada = new ArchivoEntrada("Kanto.txt");
 
-        }catch (Exception e){
+        } catch (Exception e) {
             StdOut.println("El archivo no existe");
             return;
         }
 
-
-        while (!archivoEntrada.isEndFile()){
+        while (!archivoEntrada.isEndFile()) {
 
             //verificar si el pokemón tiene campos validos
-            try{
+            try {
 
                 Registro registro = archivoEntrada.getRegistro();
 
@@ -194,60 +201,115 @@ public class SistemaImpl implements Sistema{
                 String id = registro.getString().strip();
                 String nombre = registro.getString().strip();
                 String etapa = registro.getString().strip();
-                String evolucionSiguiente = registro.getString().strip();
-                String evolucionPrevia = registro.getString().strip();
+                String evolucionSiguiente;
+                String evolucionPrevia;
                 String tipo1 = registro.getString().strip();
                 String tipo2 = registro.getString().strip();
-
 
                 //VALIDACIONES DE DATOS DE ENTRADA
 
                 //validar que el id sean numero y que estén dentro del rango
                 int idInt = Integer.parseInt(id);
-                if(idInt < 1 || idInt > 151){
-                    throw new Exception  ("El pokemón tiene un id inválido");
+                try {
+                    Utils.validarNumero(idInt, 1, 151);
+                } catch (IllegalArgumentException ex) {
+                    print("Ha ocurrido un error: " + ex);
                 }
 
                 //validar la etapa del pokemon
-                if(!etapa.equalsIgnoreCase("basico") && !etapa.equalsIgnoreCase("primera evolucion") && !etapa.equalsIgnoreCase("segunda evolucion") ){
-                    throw  new Exception("El pokemón tiene una etapa inválida");
+                if (!etapa.equalsIgnoreCase("basico") && !etapa.equalsIgnoreCase("primera evolucion") && !etapa.equalsIgnoreCase("segunda evolucion")) {
+                    throw new Exception("El pokemón tiene una etapa inválida");
                 }
 
                 //validar primer y segundo tipo del pokemon
-                if(tipo1.length()==0){
+                if (tipo1.length() == 0) {
                     throw new Exception("El pokemón debe tener almenos 1 tipo.");
 
-                }else if(!validarTipoPokemon(tipo1)){
+                } else if (!validarTipoPokemon(tipo1)) {
                     throw new Exception("El tipo del pokemon no existe");
 
                     //si el tipo 1 existe, pregunto si tiene un segundo
                 } else if (validarTipoPokemon(tipo1)) {
 
                     //si el segundo tipo no existe, se arroja error
-                    if(!validarTipoPokemon(tipo2) || !tipo2.equalsIgnoreCase("")){
+                    if (!validarTipoPokemon(tipo2) || !tipo2.equalsIgnoreCase("")) {
                         throw new Exception("El segundo tipo del pokemón no existe");
                     }
                 }
 
-                //si las validaciones están correctas, se crea el pokemón
-                Pokemon pokemon = new Pokemon(idInt,nombre,etapa,evolucionSiguiente,evolucionPrevia,tipo1,tipo2);
-                pokedex.agregar(pokemon);
+                if (etapa.equalsIgnoreCase("Basico")) {
+                    evolucionSiguiente = registro.getString().strip();
+                    evolucionPrevia = null;
+                    String aux = registro.getString().strip();
+
+                    //Valida si el campo siguiente es un tipo o no.
+                    if (Utils.validarTipoPokemon(aux)) {
+                        tipo1 = aux;
+                        tipo2 = registro.getString().strip();
+                        Pokemon pokemon = new Pokemon(idInt, nombre, etapa, evolucionSiguiente, evolucionPrevia, tipo1, tipo2);
+                        pokedex.agregar(pokemon);
+                    } else {
+                        String aux2 = registro.getString().strip();
+                        if (Utils.validarTipoPokemon(aux2)) {
+                            tipo1 = aux2;
+                            tipo2 = registro.getString().strip();
+                            Pokemon pokemon = new Pokemon(idInt, nombre, etapa, evolucionSiguiente, evolucionPrevia, tipo1, tipo2);
+                            pokedex.agregar(pokemon);
+                        }
+                    }
+                    //Caso de Pokémon que es primera evolución.
+                } else if (etapa.equalsIgnoreCase("Primera Evolucion")) {
+                    evolucionSiguiente = registro.getString().strip();
+                    String aux = registro.getString().strip();
+                    if (!Utils.validarTipoPokemon(aux)) {
+                        evolucionPrevia = aux;
+                        tipo1 = registro.getString().strip();
+                        tipo2 = registro.getString().strip();
+                        Pokemon pokemon = new Pokemon(idInt, nombre, etapa, evolucionSiguiente, evolucionPrevia, tipo1, tipo2);
+                        pokedex.agregar(pokemon);
+                    } else {
+                        evolucionPrevia = null;
+                        tipo1 = aux;
+                        tipo2 = registro.getString().strip();
+                        Pokemon pokemon = new Pokemon(idInt, nombre, etapa, evolucionSiguiente, evolucionPrevia, tipo1, tipo2);
+                        pokedex.agregar(pokemon);
+                    }
+                    //Caso en que el Pokémon es segundaevolución.
+                } else if (etapa.equalsIgnoreCase("Segunda Evolucion")) {
 
 
+                    evolucionSiguiente = null;
+                    evolucionPrevia = registro.getString().strip();
+                    String aux = registro.getString().strip();
+
+                    if (Utils.validarTipoPokemon(aux)) {
+                        tipo1 = aux;
+                        tipo2 = registro.getString().strip();
+                        Pokemon pokemon = new Pokemon(idInt, nombre, etapa, evolucionSiguiente, evolucionPrevia, tipo1, tipo2);
+                        pokedex.agregar(pokemon);
+                    } else {
+                        String aux2 = registro.getString().strip();
+                        if (Utils.validarTipoPokemon(aux2)) {
+                            tipo1 = aux2;
+                            tipo2 = registro.getString().strip();
+                            Pokemon pokemon = new Pokemon(idInt, nombre, etapa, evolucionSiguiente, evolucionPrevia, tipo1, tipo2);
+                            pokedex.agregar(pokemon);
+                        }
+                    }
+                }
 
                 //error de pokemon con campos invalidos
-            }catch(Exception e){
+            } catch (Exception e) {
                 StdOut.println(" |!| Pokemón con campos inválidos |!| ");
             }
         }
-
-
     }
 
     /**
      * Método que despliega una lista de Pokémon dado un rango.
+     *
      * @param Inicio - valor inicial del rango.
-     * @param Fin - valor final del rango.
+     * @param Fin    - valor final del rango.
      */
     @Override
     public void desplegarPokemon(int Inicio, int Fin) {
@@ -257,9 +319,9 @@ public class SistemaImpl implements Sistema{
         StringBuilder pokemonInfo = new StringBuilder();
 
         //Recorre la lista general.
-        for(NodoDoble aux=this.pokedex.getHead(); aux!=null; aux=aux.getNext()){
+        for (NodoDoble aux = this.pokedex.getHead(); aux != null; aux = aux.getNext()) {
             //Elemento es instancia de Pokemon.
-            if(aux.getElemento() instanceof Pokemon pokemon){
+            if (aux.getElemento() instanceof Pokemon pokemon) {
                 //Guarda el ID del Pokémon en una lista de ID auxiliar.
                 int auxID = pokemon.toInt();
                 listaAux.add(auxID);
@@ -270,15 +332,15 @@ public class SistemaImpl implements Sistema{
         Collections.sort(listaAux);
 
         //Recorre la lista auxiliar de ID.
-        for(int i:listaAux){
+        for (int i : listaAux) {
             //Recorre la lista general.
-            for(NodoDoble aux=this.pokedex.getHead(); aux!=null; aux=aux.getNext()){
+            for (NodoDoble aux = this.pokedex.getHead(); aux != null; aux = aux.getNext()) {
                 //Guarda el elemento.
                 Elemento elementoAux = aux.getElemento();
                 Pokemon pokeAux = (Pokemon) elementoAux;
 
                 //Compara si el ID del Pokémon auxiliar es idéntico a un elemento en la lista auxiliar de ID.
-                if(pokeAux.getId()==i){
+                if (pokeAux.getId() == i) {
                     //Guarda la lista en la lista final.
                     pokeList.add(pokeAux);
                 }
@@ -286,20 +348,20 @@ public class SistemaImpl implements Sistema{
         }
 
         //Recorre la lista de Pokémon ordenados.
-        for(Pokemon auxPoke : pokeList){
+        for (Pokemon auxPoke : pokeList) {
             //Saca la información de cada Pokémon.
             pokemonInfo.append("ID: ").append(auxPoke.getId()).append("\n");
             pokemonInfo.append("Nombre: ").append(auxPoke.getNombre()).append("\n");
             pokemonInfo.append("Etapa: ").append(auxPoke.getEtapa()).append("\n");
-            if(!auxPoke.tieneEvo()){
+            if (!auxPoke.tieneEvo()) {
                 pokemonInfo.append("Evolución Siguiente: ").append(auxPoke.getEvolucionSiguiente()).append("\n");
             }
-            if(!auxPoke.esEvo()){
+            if (!auxPoke.esEvo()) {
                 pokemonInfo.append("Evolución Previa: ").append(auxPoke.getEvolucionPrevia()).append("\n");
             }
-            if(auxPoke.getTipo1().equals(auxPoke.getTipo2())){
+            if (auxPoke.getTipo1().equals(auxPoke.getTipo2())) {
                 pokemonInfo.append("Tipo: ").append(auxPoke.getTipo1()).append("\n");
-            }else {
+            } else {
                 pokemonInfo.append("Tipos: ").append(auxPoke.getTipo1()).append(", ").append(auxPoke.getTipo2()).append("\n");
             }
             pokemonInfo.append("=========================================================\n");
@@ -315,37 +377,37 @@ public class SistemaImpl implements Sistema{
         List<Pokemon> pokemonList = new ArrayList<>();
         StringBuilder pokemonInfo = new StringBuilder();
 
-        for(NodoDoble aux=this.pokedex.getHead(); aux!=null; aux=aux.getNext()){
+        for (NodoDoble aux = this.pokedex.getHead(); aux != null; aux = aux.getNext()) {
             String auxName = aux.getElemento().toString();
             alphaName.add(auxName);
         }
 
         Collections.sort(alphaName);
 
-        for(String name : alphaName){
-            for(NodoDoble aux=this.pokedex.getHead(); aux!=null; aux=aux.getNext()){
+        for (String name : alphaName) {
+            for (NodoDoble aux = this.pokedex.getHead(); aux != null; aux = aux.getNext()) {
                 Pokemon pkm = (Pokemon) aux.getElemento();
 
-                if(pkm.getNombre().equals(name)){
+                if (pkm.getNombre().equals(name)) {
                     pokemonList.add(pkm);
                 }
             }
         }
 
         //Recorre la lista ordenada.
-        for(Pokemon auxPoke : pokemonList){
+        for (Pokemon auxPoke : pokemonList) {
             pokemonInfo.append("ID: ").append(auxPoke.getId()).append("\n");
             pokemonInfo.append("Nombre: ").append(auxPoke.getNombre()).append("\n");
             pokemonInfo.append("Etapa: ").append(auxPoke.getEtapa()).append("\n");
-            if(!auxPoke.tieneEvo()){
+            if (!auxPoke.tieneEvo()) {
                 pokemonInfo.append("Evolución Siguiente: ").append(auxPoke.getEvolucionSiguiente()).append("\n");
             }
-            if(!auxPoke.esEvo()){
+            if (!auxPoke.esEvo()) {
                 pokemonInfo.append("Evolución Previa: ").append(auxPoke.getEvolucionPrevia()).append("\n");
             }
-            if(auxPoke.getTipo1().equals(auxPoke.getTipo2())){
+            if (auxPoke.getTipo1().equals(auxPoke.getTipo2())) {
                 pokemonInfo.append("Tipo: ").append(auxPoke.getTipo1()).append("\n");
-            }else {
+            } else {
                 pokemonInfo.append("Tipos: ").append(auxPoke.getTipo1()).append(", ").append(auxPoke.getTipo2()).append("\n");
             }
             pokemonInfo.append("=========================================================\n");
@@ -362,30 +424,30 @@ public class SistemaImpl implements Sistema{
         List<Pokemon> lista = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
 
-        for(NodoDoble aux=this.pokedex.getHead(); aux!=null; aux=aux.getNext()){
+        for (NodoDoble aux = this.pokedex.getHead(); aux != null; aux = aux.getNext()) {
             Pokemon pokemon = (Pokemon) aux.getElemento();
             String tipo1 = pokemon.getTipo1();
             String tipo2 = pokemon.getTipo2();
 
-            if(tipo.equals(tipo1) || tipo.equals(tipo2)){
+            if (tipo.equals(tipo1) || tipo.equals(tipo2)) {
                 lista.add(pokemon);
             }
         }
 
         //Recorre la lista ordenada.
-        for(Pokemon auxPoke : lista){
+        for (Pokemon auxPoke : lista) {
             sb.append("ID: ").append(auxPoke.getId()).append("\n");
             sb.append("Nombre: ").append(auxPoke.getNombre()).append("\n");
             sb.append("Etapa: ").append(auxPoke.getEtapa()).append("\n");
-            if(!auxPoke.tieneEvo()){
+            if (!auxPoke.tieneEvo()) {
                 sb.append("Evolución Siguiente: ").append(auxPoke.getEvolucionSiguiente()).append("\n");
             }
-            if(!auxPoke.esEvo()){
+            if (!auxPoke.esEvo()) {
                 sb.append("Evolución Previa: ").append(auxPoke.getEvolucionPrevia()).append("\n");
             }
-            if(auxPoke.getTipo1().equals(auxPoke.getTipo2())){
+            if (auxPoke.getTipo1().equals(auxPoke.getTipo2())) {
                 sb.append("Tipo: ").append(auxPoke.getTipo1()).append("\n");
-            }else {
+            } else {
                 sb.append("Tipos: ").append(auxPoke.getTipo1()).append(", ").append(auxPoke.getTipo2()).append("\n");
             }
             sb.append("=========================================================\n");
@@ -403,11 +465,11 @@ public class SistemaImpl implements Sistema{
         List<Integer> id = new ArrayList<>();
 
         //Recorre la lista para separar los Pokémon que son primera evolución.
-        for(NodoDoble aux=this.pokedex.getHead(); aux!=null; aux=aux.getNext()){
+        for (NodoDoble aux = this.pokedex.getHead(); aux != null; aux = aux.getNext()) {
             Pokemon pkmaux = (Pokemon) aux.getElemento();
 
             //Guarda el ID de un Pokémon de primera evolución en una lista auxiliar.
-            if(pkmaux.getEtapa().equals("Primera Evolucion")){
+            if (pkmaux.getEtapa().equals("Primera Evolucion")) {
                 int auxID = pkmaux.toInt();
                 id.add(auxID);
             }
@@ -418,32 +480,32 @@ public class SistemaImpl implements Sistema{
         id.sort(comparator);
 
         //Recorre la lista auxiliar.
-        for(int i : id) {
+        for (int i : id) {
             //Recorre la lista general.
             for (NodoDoble aux = this.pokedex.getHead(); aux != null; aux = aux.getNext()) {
                 Pokemon pokemon = (Pokemon) aux.getElemento();
 
                 //Guarda el Pokémon en una lista especializada.
-                if(i==pokemon.getId()){
+                if (i == pokemon.getId()) {
                     primeraEvo.add(pokemon);
                 }
             }
         }
 
         //Recorre la lista ordenada.
-        for(Pokemon auxPoke : primeraEvo){
+        for (Pokemon auxPoke : primeraEvo) {
             sb.append("ID: ").append(auxPoke.getId()).append("\n");
             sb.append("Nombre: ").append(auxPoke.getNombre()).append("\n");
             sb.append("Etapa: ").append(auxPoke.getEtapa()).append("\n");
-            if(!auxPoke.tieneEvo()){
+            if (!auxPoke.tieneEvo()) {
                 sb.append("Evolución Siguiente: ").append(auxPoke.getEvolucionSiguiente()).append("\n");
             }
-            if(!auxPoke.esEvo()){
+            if (!auxPoke.esEvo()) {
                 sb.append("Evolución Previa: ").append(auxPoke.getEvolucionPrevia()).append("\n");
             }
-            if(auxPoke.getTipo1().equals(auxPoke.getTipo2())){
+            if (auxPoke.getTipo1().equals(auxPoke.getTipo2())) {
                 sb.append("Tipo: ").append(auxPoke.getTipo1()).append("\n");
-            }else {
+            } else {
                 sb.append("Tipos: ").append(auxPoke.getTipo1()).append(", ").append(auxPoke.getTipo2()).append("\n");
             }
             sb.append("=========================================================\n");
@@ -459,8 +521,8 @@ public class SistemaImpl implements Sistema{
         //Valida el nombre ingresado.
         try {
             Utils.validarString(nombre);
-        }catch (IllegalArgumentException ex){
-            print("Ha ocurrido un error: "+ex);
+        } catch (IllegalArgumentException ex) {
+            print("Ha ocurrido un error: " + ex);
         }
 
         StringBuilder sb = new StringBuilder();
@@ -469,19 +531,19 @@ public class SistemaImpl implements Sistema{
         for (NodoDoble aux = this.pokedex.getHead(); aux != null; aux = aux.getNext()) {
             Pokemon pokemonAux = (Pokemon) aux.getElemento();
 
-            if(nombre.equals(pokemonAux.getNombre())){
+            if (nombre.equals(pokemonAux.getNombre())) {
                 sb.append("ID: ").append(pokemonAux.getId()).append("\n");
                 sb.append("Nombre: ").append(pokemonAux.getNombre()).append("\n");
                 sb.append("Etapa: ").append(pokemonAux.getEtapa()).append("\n");
-                if(!pokemonAux.tieneEvo()){
+                if (!pokemonAux.tieneEvo()) {
                     sb.append("Evolución Siguiente: ").append(pokemonAux.getEvolucionSiguiente()).append("\n");
                 }
-                if(!pokemonAux.esEvo()){
+                if (!pokemonAux.esEvo()) {
                     sb.append("Evolución Previa: ").append(pokemonAux.getEvolucionPrevia()).append("\n");
                 }
-                if(pokemonAux.getTipo1().equals(pokemonAux.getTipo2())){
+                if (pokemonAux.getTipo1().equals(pokemonAux.getTipo2())) {
                     sb.append("Tipo: ").append(pokemonAux.getTipo1()).append("\n");
-                }else {
+                } else {
                     sb.append("Tipos: ").append(pokemonAux.getTipo1()).append(", ").append(pokemonAux.getTipo2()).append("\n");
                 }
                 sb.append("=========================================================\n");
@@ -491,7 +553,7 @@ public class SistemaImpl implements Sistema{
 
             String opcion = StdIn.readString();
 
-            switch (opcion){
+            switch (opcion) {
                 case "1" -> desplegarEvolucion(pokemonAux);
                 case "2" -> estado = salir(estado);
             }
@@ -502,9 +564,9 @@ public class SistemaImpl implements Sistema{
     public void busquedaPersonalizada(int id, boolean estado) {
         //Valida el nombre ingresado.
         try {
-            Utils.validarNumero(id,1,151);
-        }catch (IllegalArgumentException ex){
-            print("Ha ocurrido un error: "+ex);
+            Utils.validarNumero(id, 1, 151);
+        } catch (IllegalArgumentException ex) {
+            print("Ha ocurrido un error: " + ex);
         }
 
         StringBuilder sb = new StringBuilder();
@@ -513,19 +575,19 @@ public class SistemaImpl implements Sistema{
         for (NodoDoble aux = this.pokedex.getHead(); aux != null; aux = aux.getNext()) {
             Pokemon pokemonAux = (Pokemon) aux.getElemento();
 
-            if(id== pokemonAux.getId()){
+            if (id == pokemonAux.getId()) {
                 sb.append("ID: ").append(pokemonAux.getId()).append("\n");
                 sb.append("Nombre: ").append(pokemonAux.getNombre()).append("\n");
                 sb.append("Etapa: ").append(pokemonAux.getEtapa()).append("\n");
-                if(!pokemonAux.tieneEvo()){
+                if (!pokemonAux.tieneEvo()) {
                     sb.append("Evolución Siguiente: ").append(pokemonAux.getEvolucionSiguiente()).append("\n");
                 }
-                if(!pokemonAux.esEvo()){
+                if (!pokemonAux.esEvo()) {
                     sb.append("Evolución Previa: ").append(pokemonAux.getEvolucionPrevia()).append("\n");
                 }
-                if(pokemonAux.getTipo1().equals(pokemonAux.getTipo2())){
+                if (pokemonAux.getTipo1().equals(pokemonAux.getTipo2())) {
                     sb.append("Tipo: ").append(pokemonAux.getTipo1()).append("\n");
-                }else {
+                } else {
                     sb.append("Tipos: ").append(pokemonAux.getTipo1()).append(", ").append(pokemonAux.getTipo2()).append("\n");
                 }
                 sb.append("=========================================================\n");
@@ -535,7 +597,7 @@ public class SistemaImpl implements Sistema{
 
             String opcion = StdIn.readString();
 
-            switch (opcion){
+            switch (opcion) {
                 case "1" -> desplegarEvolucion(pokemonAux);
                 case "2" -> estado = salir(estado);
             }
@@ -545,10 +607,10 @@ public class SistemaImpl implements Sistema{
     /**
      * Menú de busqueda personalizada
      */
-    public void subMenu(){
+    public void subMenu() {
         String menu = """
                 ¿Qué desea hacer?
-                
+                                
                 [1] Ver evoluciones.
                 [2] Salir.
                 """;
@@ -558,6 +620,7 @@ public class SistemaImpl implements Sistema{
 
     /**
      * Método para mirar las evoluciones de un Pokémon.
+     *
      * @param pokemon con evoluciones.
      */
     @Override
@@ -567,6 +630,7 @@ public class SistemaImpl implements Sistema{
 
     /**
      * Método para finalizar el programa.
+     *
      * @param estado del programa.
      * @return false para salir.
      */
@@ -578,30 +642,34 @@ public class SistemaImpl implements Sistema{
 
     /**
      * Método auxiliar para imprimir.
+     *
      * @param string a imprimir.
      */
-    public void print(String string){
+    public void print(String string) {
         System.out.println(string);
     }
 
     /**
      * metodo que valida el tipo de un pokemon
+     *
      * @param tipoIngresado el tipo que se ingresa
      * @return true si existe, false si no
      */
-    public boolean validarTipoPokemon(String tipoIngresado){
+    public boolean validarTipoPokemon(String tipoIngresado) {
 
         //todos los tipos de pokemon que existen.
-        String tiposDePokemon[] = {"normal","bicho", "dragón", "electrico", "hada", "lucha", "fuego", "volador", "fantasma", "planta", "tierra", "hielo", "veneno", "psíquico", "roca", "acero", "agua"};
+        String tiposDePokemon[] = {"normal", "bicho", "dragón", "electrico", "hada", "lucha", "fuego", "volador", "fantasma", "planta", "tierra", "hielo", "veneno", "psíquico", "roca", "acero", "agua"};
 
         //preguntar si el tipo ingresado es alguno de los 19 que existen
-        for (int i = 0; i <tiposDePokemon.length ; i++) {
+        for (int i = 0; i < tiposDePokemon.length; i++) {
 
-            if(tipoIngresado.equalsIgnoreCase(tiposDePokemon[i])){
+            if (tipoIngresado.equalsIgnoreCase(tiposDePokemon[i])) {
                 return true;
             }
         }
 
         return false;
     }
+
 }
+

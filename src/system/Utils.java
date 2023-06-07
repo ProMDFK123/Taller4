@@ -49,4 +49,41 @@ public class Utils {
             throw new IllegalArgumentException("El número ingresado no se encuentra dentro del rango.");
         }
     }
+
+    /**
+     * metodo que valida el tipo de un pokemon
+     * @param tipoIngresado el tipo que se ingresa
+     * @return true si existe, false si no
+     */
+    public static boolean validarTipoPokemon(String tipoIngresado){
+
+        //todos los tipos de pokemon que existen.
+        String tiposDePokemon[] = {"Normal","Lucha","Volador","Veneno","Tierra","Roca","Insecto","Fantasma","Acero","Fuego","Agua","Hierba","Electrico","Psiquico","Hielo","Dragon","Siniestro","Hada"};
+
+        //preguntar si el tipo ingresado es alguno de los 19 que existen
+        for (int i = 0; i <tiposDePokemon.length ; i++) {
+
+            if(!tipoIngresado.equalsIgnoreCase(tiposDePokemon[i])){
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Método que valida la etapa de un Pokémon.
+     * @param etapa
+     * @return
+     */
+    public static boolean validarEtapa(String etapa){
+        //Revisa si la etapa es básico, primera evolución o segunda evolución.
+        if(etapa.equalsIgnoreCase("Basico") || etapa.equals("Primera Evolucion") || etapa.equalsIgnoreCase("Segunda Evolucion")){
+            //Es básico, primera o segunda evolución.
+            return true;
+        }
+
+        //No es una opción válida.
+        return false;
+    }
 }
