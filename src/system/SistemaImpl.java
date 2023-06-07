@@ -29,6 +29,7 @@ public class SistemaImpl implements Sistema{
      */
     public SistemaImpl(){
         this.pokedex = new ListaNodoDoble();
+        this.leerArchivo();
         this.menu();
     }
 
@@ -124,7 +125,7 @@ public class SistemaImpl implements Sistema{
                             print("Ingrese el tipo del pokemón a buscar: ");
                             String tipo = StdIn.readString();
 
-                            if (validarTipoPokemon(tipo)) {
+                            if (Utils.validarTipoPokemon(tipo)) {
                                 desplegarTipo(tipo);
                                 break;
                             } else {
@@ -196,16 +197,6 @@ public class SistemaImpl implements Sistema{
                     break;
                 }
 
-                String nombre = registro.getString().strip();
-                String etapa = registro.getString().strip();
-                String evolucionSiguiente = registro.getString().strip();
-                String evolucionPrevia = registro.getString().strip();
-                String tipo1 = registro.getString().strip();
-                String tipo2 = registro.getString().strip();
-
-
-                //VALIDACIONES DE DATOS DE ENTRADA
-
                 //validar que el id sean numero y que estén dentro del rango
                 int idInt = Integer.parseInt(id);
                 try{
@@ -213,36 +204,65 @@ public class SistemaImpl implements Sistema{
                 }catch (IllegalArgumentException ex){
                     print("Ha ocurrido un error: "+ex);
                 }
-
-                //validar la etapa del pokemon
-                if(!Utils.validarEtapa(etapa)){
-                    throw  new Exception("El pokemón tiene una etapa inválida");
-                }
-
-
-                //validar primer y segundo tipo del pokemon
-                try{
-                    Utils.validarString(tipo1);
-                }catch (IllegalArgumentException ex) {
-                    StdOut.println("El pokemón debe tener almenos 1 tipo.");
-                }
-
-                if(!Utils.validarTipoPokemon(tipo1)){
-                    throw new Exception("El tipo del pokemon no existe");
-
-                    //si el tipo 1 existe, pregunto si tiene un segundo
-                } else if (Utils.validarTipoPokemon(tipo1)) {
-
-                    //si el segundo tipo no existe, se arroja error
-                    if(!Utils.validarTipoPokemon(tipo2) || !tipo2.equalsIgnoreCase("")){
-                        throw new Exception("El segundo tipo del pokemón no existe");
+                String nombre = registro.getString().strip();
+                String etapa = registro.getString().strip();
+                //Valida si el Pokémon se encuentra en etapa básica.
+                if(etapa.equalsIgnoreCase("Basico")){
+                    String evolucionSiguiente = registro.getString().strip();
+                    String evolucionPrevia = null;
+                    String aux = registro.getString().strip();
+                    //Valida si el campo siguiente es un tipo o no.
+                    if(Utils.validarTipoPokemon(aux)){
+                        String tipo1=aux;
+                        String tipo2=registro.getString().strip();
+                        Pokemon pokemon = new Pokemon(idInt,nombre,etapa,evolucionSiguiente,evolucionPrevia,tipo1,tipo2);
+                        pokedex.agregar(pokemon);
+                    }else {
+                        String aux2 = registro.getString().strip();
+                        if(Utils.validarTipoPokemon(aux2)){
+                            String tipo1=aux2;
+                            String tipo2=registro.getString().strip();
+                            Pokemon pokemon = new Pokemon(idInt,nombre,etapa,evolucionSiguiente,evolucionPrevia,tipo1,tipo2);
+                            pokedex.agregar(pokemon);
+                        }
+                    }
+                //Caso de Pokémon que es primera evolución.
+                } else if (etapa.equalsIgnoreCase("Primera Evolucion")) {
+                    String evolucionSiguiente = registro.getString().strip();
+                    String aux = registro.getString().strip();
+                    if(!Utils.validarTipoPokemon(aux)){
+                        String evolucionPrevia = aux;
+                        String tipo1 = registro.getString().strip();
+                        String tipo2 = registro.getString().strip();
+                        Pokemon pokemon = new Pokemon(idInt,nombre,etapa,evolucionSiguiente,evolucionPrevia,tipo1,tipo2);
+                        pokedex.agregar(pokemon);
+                    }else {
+                        String evolucionPrevia = null;
+                        String tipo1=aux;
+                        String tipo2 = registro.getString().strip();
+                        Pokemon pokemon = new Pokemon(idInt,nombre,etapa,evolucionSiguiente,evolucionPrevia,tipo1,tipo2);
+                        pokedex.agregar(pokemon);
+                    }
+                //Caso en que el Pokémon es segundaevolución.
+                } else if (etapa.equalsIgnoreCase("Segunda Evolucion")) {
+                    String evolucionSiguiente = null;
+                    String evolucionPrevia = registro.getString().strip();
+                    String aux = registro.getString().strip();
+                    if(Utils.validarTipoPokemon(aux)){
+                       String tipo1 = aux;
+                       String tipo2 = registro.getString().strip();
+                       Pokemon pokemon = new Pokemon(idInt,nombre,etapa,evolucionSiguiente,evolucionPrevia,tipo1,tipo2);
+                       pokedex.agregar(pokemon);
+                    }else {
+                        String aux2 = registro.getString().strip();
+                        if(Utils.validarTipoPokemon(aux2)){
+                            String tipo1 = aux2;
+                            String tipo2 = registro.getString().strip();
+                            Pokemon pokemon = new Pokemon(idInt,nombre,etapa,evolucionSiguiente,evolucionPrevia,tipo1,tipo2);
+                            pokedex.agregar(pokemon);
+                        }
                     }
                 }
-
-                //si las validaciones están correctas, se crea el pokemón
-                Pokemon pokemon = new Pokemon(idInt,nombre,etapa,evolucionSiguiente,evolucionPrevia,tipo1,tipo2);
-                pokedex.agregar(pokemon);
-
 
                 //error de pokemon con campos invalidos
             }catch(Exception e){
