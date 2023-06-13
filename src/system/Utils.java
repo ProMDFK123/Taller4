@@ -63,12 +63,12 @@ public class Utils {
         //preguntar si el tipo ingresado es alguno de los 19 que existen
         for (int i = 0; i <tiposDePokemon.length ; i++) {
 
-            if(!tipoIngresado.equalsIgnoreCase(tiposDePokemon[i])){
-                return false;
+            if(tipoIngresado.equalsIgnoreCase(tiposDePokemon[i])){
+                return true;
             }
         }
 
-        return true;
+        return false;
     }
 
     /**

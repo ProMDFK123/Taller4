@@ -73,46 +73,66 @@ public class SistemaImpl implements Sistema {
 
                     case 1: //Desplegar pokemones dado un rango y su ID
 
-                        StdOut.println("Desplegar pokemones dado un rango y su ID: \n");
+                        StdOut.println("\n ..::.. Desplegar pokemones dado un rango y su ID ..::..  \n");
 
-                        int minimo = 0;
-                        int maximo = 0;
+                        int minimo = -1;
+                        int maximo = -1;
 
-                        //validacion número mínimo
-                        while (true) {
-                            try {
-                                StdOut.println("Ingrese el número Mínimo de despliegue (minimo 0): ");
-                                String minimoString = StdIn.readString();
-                                minimo = Integer.parseInt(minimoString);
-                            } catch (Exception e) {
-                                print("Ingrese un dato válido");
-                                continue;
+                        //los ciclos e if están hechos para poder navegar entre las opciones
+                        while(minimo!=0) {
+
+                            //validacion número mínimo
+                            while (true) {
+                                try {
+                                    StdOut.println("Ingrese el número Mínimo de despliegue ((desde 1 a 151) ,0 para volver): ");
+                                    String minimoString = StdIn.readString();
+                                    minimo = Integer.parseInt(minimoString);
+                                } catch (Exception e) {
+                                    print("Ingrese un dato válido");
+                                    continue;
+                                }
+                                if (minimo == 0) {
+                                    break;
+                                } else if (minimo < 0 || minimo > 151) {
+                                    print("Ingrese un rango válido (desde 1 a 151)");
+                                    continue;
+                                }
+                                break;
                             }
-                            if (minimo < 0 || minimo > 151) {
-                                print("Ingrese un rango válido (desde 0 a 151)");
-                                continue;
+
+                            if(minimo!=0) {
+
+                                //validacion número máximo
+                                while (true) {
+                                    try {
+                                        StdOut.println("Ingrese el número Máximo de despliegue (0 para volver): ");
+                                        String maximoString = StdIn.readString();
+                                        maximo = Integer.parseInt(maximoString);
+                                    } catch (Exception e) {
+                                        print("Ingrese un dato válido");
+                                        continue;
+                                    }
+                                    if (maximo == 0) {
+                                        break;
+                                    } else if (maximo < 0 || maximo > 151) {
+                                        print("Ingrese un rango válido (desde 1 a 151)");
+                                        continue;
+                                    } else if (minimo > maximo) {
+                                        print("El rango máximo no puede ser menor al mínimo. ");
+                                        continue;
+                                    }
+                                    break;
+                                }
                             }
-                            break;
+                            if(minimo!=0 || maximo!=0 ) {
+                                if(minimo<maximo) {
+                                    print("Estos son los pokemones que hay entre " + minimo + " y " + maximo + ": \n");
+
+                                    desplegarPokemon(minimo, maximo);
+                                    break;
+                                }
+                            }
                         }
-
-                        //validacion número máximo
-                        while (true) {
-                            try {
-                                StdOut.println("Ingrese el número Máximo de despliegue: ");
-                                String maximoString = StdIn.readString();
-                                maximo = Integer.parseInt(maximoString);
-                            } catch (Exception e) {
-                                print("Ingrese un dato válido");
-                                continue;
-                            }
-                            if (maximo < 0 || maximo > 151) {
-                                print("Ingrese un rango válido (desde 0 a 151)");
-                                continue;
-                            }
-                            break;
-                        }
-
-                        desplegarPokemon(minimo, maximo);
 
                         break;
 
@@ -124,8 +144,8 @@ public class SistemaImpl implements Sistema {
 
                     case 3: //Desplegar pokemones por tipo
 
+                        print("\n ..::.. Desplegar pokemón por su tipo ..::.. \n");
                         while (true) {
-                            print("\n ..::.. Desplegar pokemón por su tipo ..::.. \n");
                             print("Ingrese el tipo del pokemón a buscar: (0 para volver)");
                             String tipo = StdIn.readString();
 
@@ -140,11 +160,11 @@ public class SistemaImpl implements Sistema {
 
                                     desplegarTipo(tipo);
                                     break;
-                                } else {
-                                    print("Ingrese un tipo de pokemón válido.");
                                 }
+                            }else{
+                                print("Ingrese un tipo de pokemón válido. ");
                             }
-                            break;
+
                         }
                         break;
 
@@ -164,7 +184,7 @@ public class SistemaImpl implements Sistema {
                             //validacion de datos
                             while (true) {
                                 try {
-                                    StdOut.println("|1| Buscar por ID \n|2| Buscar por Nombre \n|3| Volver \nOpcion: ");
+                                    StdOut.println("|1| Buscar por ID \n|2| Buscar por Nombre \n|3| Volver \nSu opcion: ");
                                     String opcionString = StdIn.readString();
                                     opcion = Integer.parseInt(opcionString);
 
@@ -177,11 +197,27 @@ public class SistemaImpl implements Sistema {
 
                             //opciones
                             switch (opcion) {
-                                case 1:
 
+                                case 1:
+                                    int idInt = 0;
+                                    while(true) {
+                                        try {
+                                            print("\nIngrese el id del pokemón a buscar: ");
+                                            String idString = StdIn.readString();
+                                            idInt = Integer.parseInt(idString);
+                                        }catch (IllegalArgumentException e ){
+                                            print("El id es de formato numérico");
+                                        }
+                                        break;
+                                    }
+                                    busquedaPersonalizada(idInt,false);
                                     break;
 
                                 case 2:
+
+                                   print("\nIngrese el nombre del pokemón a buscar: ");
+                                   String nombrePokemon = StdIn.readString();
+                                    busquedaPersonalizada(nombrePokemon,false);
 
                                     break;
 
@@ -196,6 +232,8 @@ public class SistemaImpl implements Sistema {
                             }
                             break;
                         }
+                        break;
+
                     case 6: //Cerrar la pokedex
 
                         StdOut.println("Cerrando pokedex...");
@@ -204,15 +242,12 @@ public class SistemaImpl implements Sistema {
                     default:
                         StdOut.println("Ingrese una opción váida");
                 }
-            }
 
-            //si se escogio la opcion 6, se cierra el programa
-            if (opcionInt == 6) {
+                //si se escogio la opcion 6, se cierra el programa
+            }else if (opcionInt == 6) {
                 break;
             }
-
         }
-
     }
 
     /**
@@ -662,7 +697,7 @@ public class SistemaImpl implements Sistema {
                 ¿Qué desea hacer?
                                 
                 [1] Ver evoluciones.
-                [2] Salir.
+                [2] Volver.
                 """;
 
         print(menu);
