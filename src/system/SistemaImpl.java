@@ -184,7 +184,7 @@ public class SistemaImpl implements Sistema {
                             //validacion de datos
                             while (true) {
                                 try {
-                                    StdOut.println("|1| Buscar por ID \n|2| Buscar por Nombre \n|3| Volver \nSu opcion: ");
+                                    StdOut.println("\n|1| Buscar por ID \n|2| Buscar por Nombre \n|3| Volver \nSu opcion: ");
                                     String opcionString = StdIn.readString();
                                     opcion = Integer.parseInt(opcionString);
 
@@ -200,12 +200,13 @@ public class SistemaImpl implements Sistema {
 
                                 case 1:
                                     int idInt = 0;
+                                    print("\n|Búsqueda personalizada|\n ..::.. Buscando por ID ..::.. ");
                                     while(true) {
                                         try {
                                             print("\nIngrese el id del pokemón a buscar: ");
                                             String idString = StdIn.readString();
                                             idInt = Integer.parseInt(idString);
-                                        }catch (IllegalArgumentException e ){
+                                        }catch (Exception e){
                                             print("El id es de formato numérico");
                                         }
                                         break;
@@ -214,7 +215,7 @@ public class SistemaImpl implements Sistema {
                                     break;
 
                                 case 2:
-
+                                    print("\n|Búsqueda personalizada|\n ..::.. Buscando por NOMBRE ..::.. ");
                                    print("\nIngrese el nombre del pokemón a buscar: ");
                                    String nombrePokemon = StdIn.readString();
                                     busquedaPersonalizada(nombrePokemon,false);
@@ -230,7 +231,7 @@ public class SistemaImpl implements Sistema {
                                     print("Opción inválida");
 
                             }
-                            break;
+
                         }
                         break;
 
@@ -244,7 +245,9 @@ public class SistemaImpl implements Sistema {
                 }
 
                 //si se escogio la opcion 6, se cierra el programa
-            }else if (opcionInt == 6) {
+
+            }
+            if (opcionInt == 6) {
                 break;
             }
         }
