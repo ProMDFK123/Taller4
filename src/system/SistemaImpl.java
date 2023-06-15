@@ -184,7 +184,7 @@ public class SistemaImpl implements Sistema {
                             //validacion de datos
                             while (true) {
                                 try {
-                                    StdOut.println("\n|1| Buscar por ID \n|2| Buscar por Nombre \n|3| Volver \nSu opcion: ");
+                                    StdOut.println("********************\n|1| Buscar por ID \n|2| Buscar por Nombre \n|3| Volver \nSu opcion: ");
                                     String opcionString = StdIn.readString();
                                     opcion = Integer.parseInt(opcionString);
 
@@ -203,7 +203,7 @@ public class SistemaImpl implements Sistema {
                                     print("\n|Búsqueda personalizada|\n ..::.. Buscando por ID ..::.. ");
                                     while(true) {
                                         try {
-                                            print("\nIngrese el id del pokemón a buscar: ");
+                                            print("\nIngrese el id del pokemón a buscar (0 para volver) ");
                                             String idString = StdIn.readString();
                                             idInt = Integer.parseInt(idString);
                                         }catch (Exception e){
@@ -211,13 +211,22 @@ public class SistemaImpl implements Sistema {
                                         }
                                         break;
                                     }
+                                    if(idInt==0){
+                                        break;
+                                    }
+                                    print("POKEMON CON ID |" + idInt + "|");
                                     busquedaPersonalizada(idInt,false);
                                     break;
 
                                 case 2:
                                     print("\n|Búsqueda personalizada|\n ..::.. Buscando por NOMBRE ..::.. ");
-                                   print("\nIngrese el nombre del pokemón a buscar: ");
+                                   print("\nIngrese el nombre del pokemón a buscar (0 para volver) ");
                                    String nombrePokemon = StdIn.readString();
+
+                                   if(nombrePokemon.equalsIgnoreCase("0")){
+                                       break;
+                                   }
+                                    print("POKEMON CON NOMBRE |" + nombrePokemon + "|");
                                     busquedaPersonalizada(nombrePokemon,false);
 
                                     break;
@@ -459,6 +468,9 @@ public class SistemaImpl implements Sistema {
         print(info);
     }
 
+    /**
+     * Metodo que despliega todos los pokemones en orden alfabético
+     */
     @Override
     public void desplegarAlfabetico() {
         List<String> alphaName = new ArrayList<>();
@@ -506,6 +518,10 @@ public class SistemaImpl implements Sistema {
         print(info);
     }
 
+    /**
+     * Método que despliega un pokemon dado un tipo ingresado
+     * @param tipo a buscar.
+     */
     @Override
     public void desplegarTipo(String tipo) {
 
@@ -546,6 +562,9 @@ public class SistemaImpl implements Sistema {
         print(info);
     }
 
+    /**
+     * Método que despliega la primera evolicion del pokemón
+     */
     @Override
     public void desplegarPrimeraEvolucion() {
         StringBuilder sb = new StringBuilder();
@@ -604,6 +623,11 @@ public class SistemaImpl implements Sistema {
         print(info);
     }
 
+    /**
+     * Método que busca un pokemón por el nombre ingresado
+     * @param nombre del Pokémon.
+     * @param estado true para seguir buscado, false para no seguir
+     */
     @Override
     public void busquedaPersonalizada(String nombre, boolean estado) {
         //Valida el nombre ingresado.
@@ -648,6 +672,11 @@ public class SistemaImpl implements Sistema {
         }
     }
 
+    /**
+     * Métod oque busca un pokemón por un id ingresado
+     * @param id del Pokémon.
+     * @param estado true para seguir navegando, false si no
+     */
     @Override
     public void busquedaPersonalizada(int id, boolean estado) {
         //Valida el nombre ingresado.
