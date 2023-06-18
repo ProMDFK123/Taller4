@@ -70,20 +70,4 @@ public class Utils {
 
         return false;
     }
-
-    /**
-     * Método que valida la etapa de un Pokémon.
-     * @param etapa
-     * @return
-     */
-    public static boolean validarEtapa(String etapa){
-        //Revisa si la etapa es básico, primera evolución o segunda evolución.
-        if(etapa.equalsIgnoreCase("Basico") || etapa.equals("Primera Evolucion") || etapa.equalsIgnoreCase("Segunda Evolucion")){
-            //Es básico, primera o segunda evolución.
-            return true;
-        }
-
-        //No es una opción válida.
-        return false;
-    }
 }
