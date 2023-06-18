@@ -6,11 +6,10 @@ import list.NodoDoble;
 import objects.Pokemon;
 import ucn.*;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * clase que implementa el sistema
@@ -284,9 +283,6 @@ public class SistemaImpl implements Sistema {
             try {
 
                 Registro registro = archivoEntrada.getRegistro();
-
-                //TODO HACER VALIDACION DE SALTOS DE LINEAS EN EL ARCHIVO
-                //el .strip() elimina los espacios delante y detras de un registro
 
                 String id = registro.getString().strip();
                 String nombre = registro.getString().strip();
@@ -764,6 +760,45 @@ public class SistemaImpl implements Sistema {
      */
     public void print(String string) {
         System.out.println(string);
+    }
+
+    public void leerArchivoMejorar(){
+
+        File archivo;
+
+        try{
+            archivo = new File("archivo.txt");
+
+        }catch (Exception e){
+            print("El archiv no existe");
+            return;
+        }
+        try {
+            Scanner scanner = new Scanner(archivo);
+            //se indica donde sebe terminar la primera linea
+            scanner.useDelimiter("\\n");
+
+            //ciclo de lectura, si no hay mas para leer se termina
+            while (scanner.hasNext()) {
+
+                //guarda la linea en un string
+                String linea = scanner.next();
+                //le quita los espacios delante y detras de los registros
+                linea = linea.trim();
+
+                //si hay espacio en blanco lo salta.
+                if(!linea.equalsIgnoreCase("")){
+                    StdOut.println(linea);
+
+                }
+            }
+
+            // Cerrar el scanner
+            scanner.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
 
