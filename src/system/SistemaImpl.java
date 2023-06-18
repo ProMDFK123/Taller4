@@ -27,7 +27,6 @@ public class SistemaImpl implements Sistema {
     public SistemaImpl() throws IOException {
 
         this.pokedex = new ListaNodoDoble();
-        leerArchivo();
         this.leerArchivo();
         this.menu();
     }
@@ -303,7 +302,7 @@ public class SistemaImpl implements Sistema {
                 }
 
                 //validar la etapa del pokemon
-                if (!etapa.equalsIgnoreCase("basico") && !etapa.equalsIgnoreCase("primera evolucion") && !etapa.equalsIgnoreCase("segunda evolucion")) {
+                if (!etapa.equalsIgnoreCase("basico") || !etapa.equalsIgnoreCase("primera evolucion") || !etapa.equalsIgnoreCase("segunda evolucion")) {
                     throw new Exception("El pokemón tiene una etapa inválida");
                 }
 
