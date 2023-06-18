@@ -788,7 +788,17 @@ public class SistemaImpl implements Sistema {
 
                 //si hay espacio en blanco lo salta.
                 if(!linea.equalsIgnoreCase("")){
-                    StdOut.println(linea);
+                    String palabras[] = linea.split(",");
+
+                    //recorro toda la lista separando cada palabra
+                    for (String primero : palabras) {
+
+                        //acá está la palabra suelta, habría que validar para agregar a los pokemones.
+                        primero.trim();
+
+
+                    }
+
 
                 }
             }
