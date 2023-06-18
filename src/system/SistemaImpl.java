@@ -780,26 +780,46 @@ public class SistemaImpl implements Sistema {
 
             //ciclo de lectura, si no hay mas para leer se termina
             while (scanner.hasNext()) {
+                try {
+                    //guarda la linea en un string
+                    String linea = scanner.next();
 
-                //guarda la linea en un string
-                String linea = scanner.next();
-                //le quita los espacios delante y detras de los registros
-                linea = linea.trim();
+                    //le quita los espacios delante y detras de los registros
+                    linea = linea.trim();
 
-                //si hay espacio en blanco lo salta.
-                if(!linea.equalsIgnoreCase("")){
-                    String palabras[] = linea.split(",");
+                    //si hay un espacio lo salta
+                    if (!linea.equalsIgnoreCase("")) {
 
-                    //recorro toda la lista separando cada palabra
-                    for (String primero : palabras) {
+                        String palabra[] = linea.split("\\n");
 
-                        //acá está la palabra suelta, habría que validar para agregar a los pokemones.
-                        primero.trim();
+                        for (String primero : palabra) {
+
+                            String datos[] = primero.strip().split(",");
+
+                            //se recorre todas las lineas del archivo
+                            for (int i = 0; i < datos.length; i++) {
+
+                                //se guarda cada registro de un pokemon en la variable datoPokemon
+                                String datoPokemon = datos[i].strip();
+
+                                //TODO se debe verificar que el datoPokemon sea el nombre, evolucion, tipo, etc. para poder utilizarlo
+
+                                //validar que el id sea un numero y que estén dentro del rango
+                                int idInt = Integer.parseInt(datoPokemon);
+                                try {
+                                    Utils.validarNumero(idInt, 1, 151);
+                                } catch (IllegalArgumentException ex) {
+                                    print("Ha ocurrido un error: " + ex);
+                                }
+                                //ya se leyó el ID ahora hay que leer el siguiente datoPokemón.
 
 
+
+                            }
+                        }
                     }
-
-
+                }catch (Exception e){
+                    print(" |!| Pokemón con campos inválidos |!| ");
                 }
             }
 
